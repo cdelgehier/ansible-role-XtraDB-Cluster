@@ -1,0 +1,51 @@
+---
+- name: "Stopping {{ xtradb_service }}"
+  service:
+    name: "{{ xtradb_service }}"
+    state: stopped
+
+- name: Generate configuration
+  template:
+    src:  xtradb.cnf.j2
+    dest: "{{ xtradb_config_file }}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: RedHat | Start the master node
+  service:
+    name: "{{ xtradb_service }}@bootstrap.service"
+    state: started
+  when:
+    - inventory_hostname == xtradb_master_node
+    - ansible_os_family == "RedHat"
+
+- name: RedHat | Start the master node
+  command: /etc/init.d/mysql bootstrap-pxc
+  when:
+    - inventory_hostname == xtradb_master_node
+    - ansible_os_family == "Debian"
+
+- name: Create SST user
+  mysql_user: 
+    login_user: "{{ xtradb_root_user }}"
+    login_password: "{{ xtradb_root_password }}" 
+    user: "{{ xtradb_sst_user }}"
+    password: "{{ xtradb_sst_password }}"
+    priv: "*.*:grant,reload,lock tables,process,replication client"
+  when:
+    - inventory_hostname == xtradb_master_node  
+
+- name: Start the slave nodes
+  service:
+    name: "{{ xtradb_service }}"
+    state: started
+  when:
+    - inventory_hostname != xtradb_master_node
+
+- name: Marking as configured
+  file:
+    path: "{{ xtradb_configured }}"
+    state: "touch"
+
+...

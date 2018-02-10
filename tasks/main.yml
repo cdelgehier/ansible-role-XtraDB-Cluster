@@ -1,22 +1,56 @@
 # roles/ansible-XtraDB-Cluster/tasks/main.yml
 ---
 
-- include_vars: "{{ item }}"
+- name: Checking if XtraDB cluster is already configured
+  stat:
+    path: "{{ xtradb_configured }}"
+  register: "_xtradb_configured"
+  tags: install
+
+- name: Cheking if XtraDB cluster is already secured
+  stat: 
+    path: "{{ xtradb_secured }}"
+  register: "_xtradb_secured"
+  tags: install
+
+- name: "Include {{ ansible_distribution }} variables" 
+  include_vars: "{{ item }}"
   with_first_found:
     - "{{ ansible_distribution }}.yml"
     - "{{ ansible_os_family }}.yml"
-  tags: ansible-XtraDB-Cluster
+  tags: install
+
+- name: "Include {{ ansible_distribution }} tasks"
+  include_tasks: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+  tags: install
 
 - name: Install packages
   package:
     name: "{{ item }}"
     state: installed
-  with_items: "{{ ansible-XtraDB-Cluster_packages }}"
-  tags: ansible-XtraDB-Cluster
+  with_items: "{{ xtradb_packages }}"
+  tags: install
 
 - name: Ensure service is started
   service:
-    name: "{{ ansible-XtraDB-Cluster_service }}"
+    name: "{{ xtradb_service }}"
     state: started
     enabled: true
-  tags: ansible-XtraDB-Cluster
+  tags: install
+
+- name: include secure tasks
+  import_tasks: secure_install.yml
+  tags: install
+  when: 
+    - not _xtradb_secured.stat.exists
+
+- name: include bootstrap tasks
+  import_tasks: bootstrap.yml
+  tags: configure
+  when:
+    - not _xtradb_configured.stat.exists
+
+

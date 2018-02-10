@@ -3,7 +3,17 @@
 # Distribution-specific variables for RHEL, CentOS, ...
 ---
 
-ansible-XtraDB-Cluster_packages:
-  - ansible-XtraDB-Cluster
+xtradb_repo_filename: "percona"
+xtradb_repo_name: "percona-release-$basearch"
+xtradb_repo_desc: "Percona-Release YUM repository - $basearch"
+xtradb_repo_baseurl: "http://repo.percona.com/release/$releasever/RPMS/$basearch"
+xtradb_repo_enabled: yes
+xtradb_repo_gpgcheck: yes
+xtradb_repo_gpgkey: "https://www.percona.com/downloads/RPM-GPG-KEY-percona"
 
-ansible-XtraDB-Cluster_service: ansible-XtraDB-Clusterd
+xtradb_config_file: /etc/my.cnf.d/xtradb.cnf
+xtradb_wsrep_provider: /usr/lib64/galera3/libgalera_smm.so
+xtradb_packages:
+  - "Percona-XtraDB-Cluster-{{ xtradb_version }}"
+  - MySQL-python
+...

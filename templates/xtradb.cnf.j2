@@ -1,0 +1,5 @@
+# {{ ansible_managed }} 
+[mysqld]
+{% if xtradb_options_config_files is defined %}
+{{ xtradb_options_config_files }}
+{% endif %}

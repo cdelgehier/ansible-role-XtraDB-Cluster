@@ -1,4 +1,69 @@
 # roles/ansible-XtraDB-Cluster/defaults/main.yml
 ---
 
+# Data directory
+xtradb_datadir: /var/lib/mysql
 
+# Defines the user used
+xtradb_mysql_user: mysql
+
+# setup cookie
+xtradb_configured: "{{ xtradb_datadir }}/configured"
+
+# secure cookie
+xtradb_secured: "{{ xtradb_datadir }}/secured" 
+
+# Defnes the root user
+xtradb_root_user: root
+
+# Defines the root password
+xtradb_root_password: root
+
+# Define Ansible group in which the nodes exist to be part of the cluster 
+xtradb_nodes_group: xtradb-cluster-nodes
+
+# Defines the which node should be considered the master in the cluster
+# Used to bootstrap cluster 
+xtradb_master_node: "{{ groups[xtradb_nodes_group][0] }}"
+
+# Defines the version
+xtradb_version: "57"
+
+# Defines the service systemd
+xtradb_service: mysql
+
+# Defines the network interfaces used
+xtradb_bind_interface: eth0
+
+# Defines the network address used
+xtradb_bind_address: "{{ hostvars[inventory_hostname]['ansible_' + xtradb_bind_interface]['ipv4']['address'] }}"
+
+# Defines the sst user
+xtradb_sst_user: sstuser
+
+# Defines the sst password
+xtradb_sst_password: sstpassword
+
+# Defines the cluster name
+xtradb_cluster_name: foo
+
+# Defines options for Write-Set Replication
+xtradb_options_config_files: |
+  datadir={{ xtradb_datadir }}
+  user={{ xtradb_mysql_user }}
+  
+  wsrep_provider={{ xtradb_wsrep_provider }}
+  wsrep_node_name={{ ansible_hostname }}
+  wsrep_node_address={{ xtradb_bind_address }}
+  
+  wsrep_cluster_name={{ xtradb_cluster_name }}
+  wsrep_cluster_address=gcomm://{{ groups[xtradb_nodes_group] | map('extract', hostvars, ['ansible_' ~ xtradb_bind_interface, 'ipv4', 'address']) | join(',') }}
+
+  wsrep_sst_method=xtrabackup-v2
+  wsrep_sst_auth="{{ xtradb_sst_user }}:{{ xtradb_sst_password }}"
+
+  pxc_strict_mode=ENFORCING
+  binlog_format=ROW
+  default_storage_engine=InnoDB
+  innodb_autoinc_lock_mode=2
+...

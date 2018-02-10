@@ -1,0 +1,16 @@
+# roles/ansible-XtraDB-Cluster/vars/Debian.yml
+#
+# Distribution-specific variables for Debian, Ubuntu, ...
+---
+
+xtradb_repo_filename: "percona"
+xtradb_repo_baseurl: "deb http://repo.percona.com/apt {{ ansible_distribution_release }} main"
+xtradb_repo_gpgkey: 8507EFA5
+
+xtradb_config_file: /etc/mysql/conf.d/xtradb.cnf
+xtradb_wsrep_provider: /usr/lib/libgalera_smm.so
+xtradb_packages:
+  #- "percona-server-server-{{ xtradb_version }}"
+  - "percona-xtradb-cluster-{{ xtradb_version }}"
+  - python3-mysqldb
+...

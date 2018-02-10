@@ -1,0 +1,76 @@
+---
+- name: Get temporary root password
+  shell: grep 'temporary password' /var/log/mysqld.log | awk '{print $NF}'
+  register: "_xtradb_root_temp_password"
+
+- name: Set the MySQL root password
+  shell: 'mysqladmin -u root --password="{{ _xtradb_root_temp_password.stdout }}" password "{{ xtradb_root_password }}"'
+
+#- name: Set the root password.
+#  mysql_user: 
+#    login_user: "{{ xtradb_root_user }}"
+#    login_password: "{{ _xtradb_root_temp_password.stdout }}"
+#    name: root 
+#    host: localhost
+#    password: "{{ xtradb_root_password }}"
+
+- name: Delete anonymous connections 
+  mysql_user: 
+    login_user: "{{ xtradb_root_user }}"
+    login_password: "{{ xtradb_root_password }}"
+    name: ""
+    host_all: yes
+    state: absent
+
+- name: Secure the MySQL root user for IPV6 localhost (::1)
+  mysql_user: 
+    login_user: "{{ xtradb_root_user }}"
+    login_password: "{{ xtradb_root_password }}"
+    name: "{{ xtradb_root_user }}"
+    host: "::1"
+
+- name: Secure the MySQL root user for IPV4 localhost (127.0.0.1)
+  mysql_user: 
+    login_user: "{{ xtradb_root_user }}"
+    login_password: "{{ xtradb_root_password }}"
+    name: "{{ xtradb_root_user }}"
+    host: "127.0.0.1"
+
+- name: Secure the MySQL root user for localhost domain (localhost)
+  mysql_user: 
+    login_user: "{{ xtradb_root_user }}"
+    login_password: "{{ xtradb_root_password }}"
+    name: "{{ xtradb_root_user }}"
+    host: "localhost"
+
+- name: "Secure the MySQL root user for {{ xtradb_bind_address }} domain"
+  mysql_user: 
+    login_user: "{{ xtradb_root_user }}"
+    login_password: "{{ xtradb_root_password }}"
+    name: "{{ xtradb_root_user }}"
+    host: "{{ xtradb_bind_address }}"
+
+- name: Remove the MySQL test database
+  mysql_db: 
+    db: test
+    login_user: "{{ xtradb_root_user }}"
+    login_password: "{{ xtradb_root_password }}"
+    state: absent
+
+
+#- name: Secure Mysql
+#  shell: |
+#    mysql -v -u '{{ xtradb_root_user }}' -p'{{ xtradb_root_password }}' -h 127.0.0.1 -e "DELETE FROM mysql.user WHERE User='';"
+#    mysql -v -u '{{ xtradb_root_user }}' -p'{{ xtradb_root_password }}' -h 127.0.0.1 -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
+#    mysql -v -u '{{ xtradb_root_user }}' -p'{{ xtradb_root_password }}' -h 127.0.0.1 -e "DROP DATABASE test;"
+#    mysql -v -u '{{ xtradb_root_user }}' -p'{{ xtradb_root_password }}' -h 127.0.0.1 -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\_%';"
+#    mysql -v -u '{{ xtradb_root_user }}' -p'{{ xtradb_root_password }}' -h 127.0.0.1 -e "FLUSH PRIVILEGES;"
+#    #mysql -v -u '{{ xtradb_root_user }}' -p'{{ xtradb_root_password }}' -h 127.0.0.1 -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'127.0.0.1' IDENTIFIED BY '{{ xtradb_root_password }}';"
+#    #mysql -v -u '{{ xtradb_root_user }}' -p'{{ xtradb_root_password }}' -h 127.0.0.1 -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'::1' IDENTIFIED BY '{{ xtradb_root_password }}';"
+#    #mysql -v -u '{{ xtradb_root_user }}' -p'{{ xtradb_root_password }}' -h 127.0.0.1 -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY '{{ xtradb_root_password }}';"
+#
+- name: Marking as secured
+  file:
+    path: "{{ xtradb_secured }}"
+    state: "touch"
+...
