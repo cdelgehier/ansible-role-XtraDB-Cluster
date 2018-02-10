@@ -15,11 +15,11 @@ No specific requirements
 
 | Variable   | Default | Comments (type)  |
 | :---       | :---    | :---             |
-| `xtradb_bind_address` | IP on `xtradb_bind_address` | The listening IP |
-| `xtradb_bind_interface` | eth0 | The interface used by the cluster |
-| `xtradb_cluster_name` | foo | A name for the cluster |
+| `xtradb_bind_address` | - | The listening IP |
+| `xtradb_bind_interface` | `eth0` | The interface used by the cluster |
+| `xtradb_cluster_name` | `foo` | A name for the cluster |
 | `xtradb_configured` | `xtradb_datadir`/configured | A cookie for idempotency |
-| `xtradb_datadir` | /var/lib/mysql | Directory of data |
+| `xtradb_datadir` | `/var/lib/mysql` | Directory of data |
 | `xtradb_master_node` | `groups[xtradb_nodes_group][0]` | The chosen node to be master |
 | `xtradb_mysql_user` | `mysql` | The user for run galera |
 | `xtradb_nodes_group` | `xtradb-cluster-nodes` | Node group where the cluster will be installed |
