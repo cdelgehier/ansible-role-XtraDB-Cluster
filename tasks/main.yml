@@ -1,0 +1,22 @@
+# roles/ansible-XtraDB-Cluster/tasks/main.yml
+---
+
+- include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+  tags: ansible-XtraDB-Cluster
+
+- name: Install packages
+  package:
+    name: "{{ item }}"
+    state: installed
+  with_items: "{{ ansible-XtraDB-Cluster_packages }}"
+  tags: ansible-XtraDB-Cluster
+
+- name: Ensure service is started
+  service:
+    name: "{{ ansible-XtraDB-Cluster_service }}"
+    state: started
+    enabled: true
+  tags: ansible-XtraDB-Cluster

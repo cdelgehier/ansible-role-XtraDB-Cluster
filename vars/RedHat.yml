@@ -1,0 +1,9 @@
+# roles/ansible-XtraDB-Cluster/vars/RedHat.yml
+#
+# Distribution-specific variables for RHEL, CentOS, ...
+---
+
+ansible-XtraDB-Cluster_packages:
+  - ansible-XtraDB-Cluster
+
+ansible-XtraDB-Cluster_service: ansible-XtraDB-Clusterd
