@@ -1,7 +1,7 @@
 # roles/ansible-XtraDB-Cluster/defaults/main.yml
 ---
 
-# Data directory
+# Data directory
 xtradb_datadir: /var/lib/mysql
 
 # Defines the user used
@@ -29,7 +29,7 @@ xtradb_master_node: "{{ groups[xtradb_nodes_group][0] }}"
 # Defines the version
 xtradb_version: "57"
 
-# Defines the service systemd
+# Defines the service systemd
 xtradb_service: mysql
 
 # Defines the network interfaces used
@@ -38,7 +38,7 @@ xtradb_bind_interface: eth0
 # Defines the network address used
 xtradb_bind_address: "{{ hostvars[inventory_hostname]['ansible_' + xtradb_bind_interface]['ipv4']['address'] }}"
 
-# Defines the sst user
+# Defines the sst user
 xtradb_sst_user: sstuser
 
 # Defines the sst password
@@ -47,9 +47,9 @@ xtradb_sst_password: sstpassword
 # Defines the cluster name
 xtradb_cluster_name: foo
 
-# Defines options for Write-Set Replication
+# Defines options for Write-Set Replication
 xtradb_options_config_files: |
-  datadir={{ xtradb_datadir }}
+  datadir={{ xtradb_datadir }}
   user={{ xtradb_mysql_user }}
   
   wsrep_provider={{ xtradb_wsrep_provider }}

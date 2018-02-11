@@ -3,6 +3,7 @@
 - name: Disable SELinux
   selinux:
     state: disabled
+  when: ansible_selinux.status == 'enabled'
 
 - name: repository installation
   yum_repository:
