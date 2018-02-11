@@ -44,6 +44,7 @@ No dependencies.
   become: true
   roles:
     - role: ansible-XtraDB-Cluster
+      xtradb_nodes_group: "db"
       xtradb_cluster_name: "prod-customer"
       xtradb_bind_interface: eth0
       xtradb_root_user: root
