@@ -58,8 +58,6 @@ node2 ansible_host=192.168.1.156
 node3 ansible_host=192.168.1.154
 ```
 
-...
-
 ## Testing
 
 There are two types of test environments available. One powered by Vagrant, another by Docker. The latter is suitable for running automated tests on Travis-CI. Test code is kept in separate orphan branches. For details of how to set up these test environments on your own machine, see the README files in the respective branches:
