@@ -38,6 +38,26 @@ No dependencies.
 
 ## Example Playbook
 
+```yaml
+- hosts: db
+  gather_facts: false
+  become: true
+  roles:
+    - role: ansible-XtraDB-Cluster
+      xtradb_cluster_name: "prod-customer"
+      xtradb_bind_interface: eth0
+      xtradb_root_user: root
+      xtradb_root_password: root
+      xtradb_version: 57
+```
+```ini
+[db]
+node1 ansible_host=192.168.1.173
+node2 ansible_host=192.168.1.156
+node3 ansible_host=192.168.1.154
+```
+
+...
 
 ## Testing
 
