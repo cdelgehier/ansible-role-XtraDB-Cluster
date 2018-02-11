@@ -53,7 +53,7 @@ main() {
   # container(s) after running the tests. *Not* cleaning up may be
   # useful for troubleshooting
 
-  # cleanup
+  cleanup
 }
 
 #{{{ Helper functions
