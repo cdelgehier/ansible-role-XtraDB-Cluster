@@ -1,25 +1,26 @@
 #Test playbook for Ansible role
 ---
-- hosts: localhost
-  tasks:
-    - add_host:
-        ansible_host: "{{ item.ip }}"
-        hostname: "{{ item.name }}"
-        groups: db
-      with_items:
-        - { name: "node1", ip: "172.17.0.2" }
-        - { name: "node2", ip: "172.17.0.3" }
-        - { name: "node3", ip: "172.17.0.4" }
+#- hosts: localhost
+#  tasks:
+#    - add_host:
+#        hostname: "{{ item.ip }}"
+#        ansible_host: "{{ item.name }}"
+#        groups: db
+#      with_items:
+#        - { name: "node1", ip: "172.17.0.2" }
+#        - { name: "node2", ip: "172.17.0.3" }
+#        - { name: "node3", ip: "172.17.0.4" }
 
-- hosts: db
+- hosts: all
   become: true
   vars:
   roles:
-    - role_under_test
+    - role: role_under_test
       xtradb_cluster_name: test
       xtradb_sst_user: sstuser
       xtradb_sst_password: s3cr3t
       xtradb_root_password: yolo
+      xtradb_nodes_group: all
       # tracis doesn't match
       #xtradb_nodes_group: db
       #xtradb_bind_interface: eth0
