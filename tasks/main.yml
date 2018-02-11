@@ -1,4 +1,4 @@
-# roles/ansible-XtraDB-Cluster/tasks/main.yml
+# roles/ansible-role-XtraDB-Cluster/tasks/main.yml
 ---
 
 - name: Checking if XtraDB cluster is already configured

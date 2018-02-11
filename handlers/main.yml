@@ -1,4 +1,4 @@
-# roles/ansible-XtraDB-Cluster/handlers/main.yml
+# roles/ansible-role-XtraDB-Cluster/handlers/main.yml
 ---
 
 - name: restart xtradb

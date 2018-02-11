@@ -1,4 +1,4 @@
-# roles/ansible-XtraDB-Cluster/vars/Debian.yml
+# roles/ansible-role-XtraDB-Cluster/vars/Debian.yml
 #
 # Distribution-specific variables for Debian, Ubuntu, ...
 ---

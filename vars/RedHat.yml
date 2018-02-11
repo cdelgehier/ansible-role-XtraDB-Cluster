@@ -1,4 +1,4 @@
-# roles/ansible-XtraDB-Cluster/vars/RedHat.yml
+# roles/ansible-role-XtraDB-Cluster/vars/RedHat.yml
 #
 # Distribution-specific variables for RHEL, CentOS, ...
 ---

@@ -1,4 +1,4 @@
-# roles/ansible-XtraDB-Cluster/defaults/main.yml
+# roles/ansible-role-XtraDB-Cluster/defaults/main.yml
 ---
 
 # Data directory
