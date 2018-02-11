@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/cdelgehier/ansible-XtraDB-Cluster.svg?branch=master)](https://travis-ci.org/cdelgehier/ansible-XtraDB-Cluster)
 # Ansible role `ansible-XtraDB-Cluster`
 
 An Ansible role for setup a percon XtraDB Cluster. Specifically, the responsibilities of this role are to:
