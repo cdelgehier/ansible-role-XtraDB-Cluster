@@ -40,6 +40,8 @@
     state: started
     enabled: true
   tags: install
+  when:
+    - not _xtradb_configured.stat.exists
 
 - name: include secure tasks
   import_tasks: secure_install.yml
