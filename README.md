@@ -41,7 +41,7 @@ No dependencies.
 
 ```yaml
 - hosts: db
-  gather_facts: false
+  gather_facts: true
   become: true
   roles:
     - role: ansible-role-XtraDB-Cluster
