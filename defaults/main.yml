@@ -52,18 +52,33 @@ xtradb_options_config_files: |
   datadir={{ xtradb_datadir }}
   user={{ xtradb_mysql_user }}
   
+  # Path to Galera library
   wsrep_provider={{ xtradb_wsrep_provider }}
-  wsrep_node_name={{ ansible_hostname }}
-  wsrep_node_address={{ xtradb_bind_address }}
   
   wsrep_cluster_name={{ xtradb_cluster_name }}
+  # Cluster connection URL contains the IPs of node#1, node#2 and node#3
   wsrep_cluster_address=gcomm://{{ groups[xtradb_nodes_group] | map('extract', hostvars, ['ansible_' ~ xtradb_bind_interface, 'ipv4', 'address']) | join(',') }}
-
-  wsrep_sst_method=xtrabackup-v2
-  wsrep_sst_auth="{{ xtradb_sst_user }}:{{ xtradb_sst_password }}"
-
-  pxc_strict_mode=ENFORCING
+  
+  # In order for Galera to work correctly binlog format should be ROW
   binlog_format=ROW
+
+  # MyISAM storage engine has only experimental support
   default_storage_engine=InnoDB
+
+  # This InnoDB autoincrement locking mode is a requirement for Galera
   innodb_autoinc_lock_mode=2
+
+  # Node address
+  wsrep_node_address={{ xtradb_bind_address }}
+  # Node name
+  wsrep_node_name={{ ansible_hostname }}
+
+  # SST method
+  wsrep_sst_method=xtrabackup-v2
+
+  # Authentication for SST method
+  wsrep_sst_auth={{ xtradb_sst_user }}:{{ xtradb_sst_password }}
+
+  # Block the use of experimental and unsupported features in Percona XtraDB Cluster
+  pxc_strict_mode=ENFORCING
 ...
