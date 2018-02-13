@@ -27,15 +27,15 @@ script:
   # Running the test script the first time will set up the first server
   # with IP 172.17.0.2. Running it the second time sets up the second and
   # third server with IP 172.17.0.3 and 172.17.0.4.
-  - ./tests/docker-tests.sh
-  - ./tests/docker-tests.sh
-  - ./tests/docker-tests.sh
+  - ./docker-tests/docker-tests.sh
+  - ./docker-tests/docker-tests.sh
+  - ./docker-tests/docker-tests.sh
 
   # Run functional tests on both master and slave server
-  - SUT_IP=172.17.0.2 ./tests/functional-tests.sh
+  - SUT_IP=172.17.0.2 ./docker-tests/functional-tests.sh
   # Ensure the slave gets the chance to receive zone updates from the master
   - sleep 6s
-  - SUT_IP=172.17.0.3 ./tests/functional-tests.sh
+  - SUT_IP=172.17.0.3 ./docker-tests/functional-tests.sh
   - sleep 6s
-  - SUT_IP=172.17.0.4 ./tests/functional-tests.sh
+  - SUT_IP=172.17.0.4 ./docker-tests/functional-tests.sh
 ...
