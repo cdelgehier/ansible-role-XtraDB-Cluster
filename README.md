@@ -13,7 +13,7 @@ No specific requirements
 
 ## Role Variables
 
-
+### BASICS
 | Variable   | Default | Comments (type)  |
 | :---       | :---    | :---             |
 | `xtradb_bind_address` | - | The listening IP |
@@ -24,14 +24,91 @@ No specific requirements
 | `xtradb_master_node` | `groups[xtradb_nodes_group][0]` | The chosen node to be master |
 | `xtradb_mysql_user` | `mysql` | The user for run galera |
 | `xtradb_nodes_group` | `xtradb-cluster-nodes` | Node group where the cluster will be installed |
-| `xtradb_options_config_files` | - | Minimal configuration options |
 | `xtradb_root_password` | `root` | Password for the root user |
 | `xtradb_root_user` | `root` | The root user |
 | `xtradb_secured` | `xtradb_datadir`/secured |A cookie for idempotency |
 | `xtradb_service` | `mysql` | Linux service name  |
 | `xtradb_sst_password` | `sstpassword` | Password for the `xtradb_sst_user` |
 | `xtradb_sst_user` | `sstuser` | User used to the state snapshot transfer  |
+| `xtradb_swapiness` | `0` | "Swappiness" value. System default is 60. A value of 0 means that swapping out processes is avoided.  |
+| `xtradb_databases`     | []          | List of names of the databases to be added                                                                  |
+| `xtradb_users`         | []          | List of dicts specifying the users to be added. See below for details.                                      |
 | `xtradb_version` | `57` | Package version of XtraDB |
+
+### MySQL part
+For more info on the values, read the [MariaDB Server System Variables documentation](https://mariadb.com/kb/en/mariadb/server-system-variables/).
+
+
+| Variable   | Default | Comments (type)  |
+| :---       | :---    | :---             |
+| `xtradb_binlog_format` | `ROW` | The binary logging format  |
+| `xtradb_character_set_server` | `utf` | The character set |
+| `xtradb_collation_server` | `utf8_general_ci` | The collation |
+| `xtradb_default_storage_engine` | `InnoDB` | Setting the Storage Engine |
+| `xtradb_innodb_autoinc_lock_mode` | `2` | There are three possible settings for the innodb_autoinc_lock_mode configuration parameter. The settings are 0, 1, or 2, for “traditional”, “consecutive”, or “interleaved” lock mode, respectively |
+| `xtradb_innodb_buffer_pool_instances` | ` ` | To enable multiple buffer pool instances, set the innodb_buffer_pool_instances configuration option to a value greater than 1 (the default) up to 64 (the maximum). This option takes effect only when you set innodb_buffer_pool_size to a size of 1GB or more. The total size you specify is divided among all the buffer pools |
+| `xtradb_innodb_buffer_pool_size` | ` ` | The buffer pool size [doc](https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool-resize.html) |
+| `xtradb_innodb_file_format` | ` ` |  |
+| `xtradb_innodb_file_format_check` | ` ` |  |
+| `xtradb_innodb_file_per_table` | ` ` |  |
+| `xtradb_innodb_flush_log_at_trx_commit` | ` ` |  |
+| `xtradb_innodb_log_buffer_size` | ` ` |  |
+| `xtradb_innodb_log_file_size` | ` ` |  |
+| `xtradb_innodb_file_per_table` | `on` |  |
+| `xtradb_innodb_strict_mode` | `on` |  |
+| `xtradb_join_buffer_size` | ` ` |  |
+| `xtradb_log_warnings` | ` ` |  |
+| `xtradb_log_warnings` | ` ` |  |
+| `xtradb_long_query_time` | ` ` |  |
+| `xtradb_max_allowed_packet` | ` ` |  |
+| `xtradb_max_connections` | `4096` |  |
+| `xtradb_max_heap_table_size` | ` ` |  |
+| `xtradb_max_user_connections` | ` ` |  |
+| `xtradb_pxc_strict_mode` | `ENFORCING` | PXC Strict Mode is designed to avoid the use of experimental and unsupported features in Percona XtraDB Cluster |
+| `xtradb_query_cache_size` | ` ` |  |
+| `xtradb_read_buffer_size` | ` ` |  |
+| `xtradb_read_rnd_buffer_size` | ` ` |  |
+| `xtradb_skip_name_resolve` | `1` | Use IP addresses only. Set to 0 to resolve host names. |
+| `xtradb_slow_query_log` | `0` | Set to 1 to enable the slow query log. |
+| `xtradb_socket` | ` ` |  |
+| `xtradb_sort_buffer_size` | ` ` |  |
+| `xtradb_table_definition_cache` | ` ` |  |
+| `xtradb_table_open_cache` | ` ` |  |
+| `xtradb_table_open_cache_instances` | ` ` |  |
+| `xtradb_thread_concurrency` | ` ` |  |
+| `xtradb_tmp_table_size` | ` ` |  |
+
+### Adding databases
+
+Databases are defined with a dict containing the fields `name:` (required), and `init_script:` (optional).
+The init script is a SQL file that is executed when the database is created to initialise tables and populate it with values.
+
+```yaml
+xtradb_databases:
+  - name: keystone
+  - name: mydb
+    init_script: files/init_mydb.sql
+```
+
+### Adding users
+
+Users are defined with a dict containing fields `name:`, `password:`, `priv:`, and, optionally, `host:`.
+The password is in plain text and `priv:` specifies the privileges for this user as described in the [Ansible documentation](http://docs.ansible.com/mysql_user_module.html).
+
+An example:
+
+```yaml
+xtradb_users:
+  - name: keystone
+    password: KEYSTONE_DBPASS
+    priv: 'keystone.*:SUPER'
+
+  - name: cdelgehier
+    password: yolo
+    priv: 'mydb.*:ALL'
+    host: '192.168.1.%'
+```
+
 
 ## Dependencies
 
@@ -78,4 +155,3 @@ Pull requests are also very welcome. The best way to submit a PR is by first cre
 ## Contributors
 
 - [Cedric DELGEHIER](https://github.com/cdelgehier/) (maintainer)
-

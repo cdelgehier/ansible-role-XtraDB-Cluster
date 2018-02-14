@@ -7,11 +7,14 @@ xtradb_datadir: /var/lib/mysql
 # Defines the user used
 xtradb_mysql_user: mysql
 
+# Defines the port to use
+xtradb_port: 3306
+
 # setup cookie
 xtradb_configured: "{{ xtradb_datadir }}/configured"
 
 # secure cookie
-xtradb_secured: "{{ xtradb_datadir }}/secured" 
+xtradb_secured: "{{ xtradb_datadir }}/secured"
 
 # Defnes the root user
 xtradb_root_user: root
@@ -19,11 +22,11 @@ xtradb_root_user: root
 # Defines the root password
 xtradb_root_password: root
 
-# Define Ansible group in which the nodes exist to be part of the cluster 
+# Define Ansible group in which the nodes exist to be part of the cluster
 xtradb_nodes_group: xtradb-cluster-nodes
 
 # Defines the which node should be considered the master in the cluster
-# Used to bootstrap cluster 
+# Used to bootstrap cluster
 xtradb_master_node: "{{ groups[xtradb_nodes_group][0] }}"
 
 # Defines the version
@@ -47,38 +50,49 @@ xtradb_sst_password: sstpassword
 # Defines the cluster name
 xtradb_cluster_name: foo
 
-# Defines options for Write-Set Replication
-xtradb_options_config_files: |
-  datadir={{ xtradb_datadir }}
-  user={{ xtradb_mysql_user }}
-  
-  # Path to Galera library
-  wsrep_provider={{ xtradb_wsrep_provider }}
-  
-  wsrep_cluster_name={{ xtradb_cluster_name }}
-  # Cluster connection URL contains the IPs of node#1, node#2 and node#3
-  wsrep_cluster_address=gcomm://{{ groups[xtradb_nodes_group] | map('extract', hostvars, ['ansible_' ~ xtradb_bind_interface, 'ipv4', 'address']) | join(',') }}
-  
-  # In order for Galera to work correctly binlog format should be ROW
-  binlog_format=ROW
+# Defines the swapiness by node
+xtradb_swapiness: 0
 
-  # MyISAM storage engine has only experimental support
-  default_storage_engine=InnoDB
+# Defines users to create
+xtradb_users: []
 
-  # This InnoDB autoincrement locking mode is a requirement for Galera
-  innodb_autoinc_lock_mode=2
+# Defines databases to create
+xtradb_databases: []
 
-  # Node address
-  wsrep_node_address={{ xtradb_bind_address }}
-  # Node name
-  wsrep_node_name={{ ansible_hostname }}
 
-  # SST method
-  wsrep_sst_method=xtrabackup-v2
+xtradb_binlog_format: "ROW"
+xtradb_character_set_server: "utf8"
+xtradb_collation_server: "utf8_general_ci"
+xtradb_default_storage_engine: "InnoDB"
+xtradb_innodb_autoinc_lock_mode: 2
+xtradb_innodb_buffer_pool_instances: ""
+xtradb_innodb_buffer_pool_size: ""
+xtradb_innodb_file_format: ""
+xtradb_innodb_file_format_check: ""
+xtradb_innodb_file_per_table: ""
+xtradb_innodb_flush_log_at_trx_commit: ""
+xtradb_innodb_log_buffer_size: ""
+xtradb_innodb_log_file_size: ""
+xtradb_innodb_strict_mode: "on"
+xtradb_join_buffer_size: ""
+xtradb_log_warnings: ""
+xtradb_long_query_time: ""
+xtradb_max_allowed_packet: ""
+xtradb_max_connections: "4096"
+xtradb_max_heap_table_size: ""
+xtradb_max_user_connections: ""
+xtradb_pxc_strict_mode: "ENFORCING"
+xtradb_query_cache_size: ""
+xtradb_read_buffer_size: ""
+xtradb_read_rnd_buffer_size: ""
+xtradb_skip_name_resolve: "1"
+xtradb_slow_query_log: "0"
+xtradb_socket: ""
+xtradb_sort_buffer_size: ""
+xtradb_table_definition_cache: ""
+xtradb_table_open_cache: ""
+xtradb_table_open_cache_instances: ""
+xtradb_thread_concurrency: "{{ ansible_processor_vcpus * 2 }}"
+xtradb_tmp_table_size: ""
 
-  # Authentication for SST method
-  wsrep_sst_auth={{ xtradb_sst_user }}:{{ xtradb_sst_password }}
-
-  # Block the use of experimental and unsupported features in Percona XtraDB Cluster
-  pxc_strict_mode=ENFORCING
 ...
