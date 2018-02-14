@@ -7,9 +7,6 @@ xtradb_datadir: /var/lib/mysql
 # Defines the user used
 xtradb_mysql_user: mysql
 
-# Defines the port to use
-xtradb_port: 3306
-
 # setup cookie
 xtradb_configured: "{{ xtradb_datadir }}/configured"
 
@@ -92,7 +89,6 @@ xtradb_sort_buffer_size: ""
 xtradb_table_definition_cache: ""
 xtradb_table_open_cache: ""
 xtradb_table_open_cache_instances: ""
-xtradb_thread_concurrency: "{{ ansible_processor_vcpus * 2 }}"
 xtradb_tmp_table_size: ""
 
 ...

@@ -3,7 +3,6 @@
 
 # GENERAL #####
 {% if xtradb_socket %}socket                         = {{ xtradb_socket }}{% endif %}
-#port                           = {{ xtradb_port }}
 user                           = {{ xtradb_mysql_user }}
 datadir                        = {{ xtradb_datadir }}
 
@@ -16,7 +15,6 @@ datadir                        = {{ xtradb_datadir }}
 {% if xtradb_max_user_connections %}max_user_connections           = {{ xtradb_max_user_connections }}{% endif %}
 {% if xtradb_max_allowed_packet %}max_allowed_packet             = {{ xtradb_max_allowed_packet }}{% endif %}
 {% if xtradb_max_heap_table_size %}max_heap_table_size            = {{ xtradb_max_heap_table_size }}{% endif %}
-{% if xtradb_thread_concurrency %}thread_concurrency             = {{ xtradb_thread_concurrency }}{% endif %}
 
 {% if xtradb_query_cache_size %}query_cache_size               = {{ xtradb_query_cache_size }}{% endif %}
 {% if xtradb_sort_buffer_size %}sort_buffer_size               = {{ xtradb_sort_buffer_size }}{% endif %}

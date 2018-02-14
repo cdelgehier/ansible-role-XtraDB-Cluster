@@ -75,7 +75,6 @@ For more info on the values, read the [MariaDB Server System Variables documenta
 | `xtradb_table_definition_cache` | ` ` |  |
 | `xtradb_table_open_cache` | ` ` |  |
 | `xtradb_table_open_cache_instances` | ` ` |  |
-| `xtradb_thread_concurrency` | ` ` |  |
 | `xtradb_tmp_table_size` | ` ` |  |
 
 ### Adding databases
