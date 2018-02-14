@@ -7,51 +7,36 @@
   shell: 'mysqladmin -u root --password="{{ _xtradb_root_temp_password.stdout }}" password "{{ xtradb_root_password }}"'
 
 #- name: Set the root password.
-#  mysql_user: 
+#  mysql_user:
 #    login_user: "{{ xtradb_root_user }}"
 #    login_password: "{{ _xtradb_root_temp_password.stdout }}"
-#    name: root 
+#    name: root
 #    host: localhost
 #    password: "{{ xtradb_root_password }}"
 
-- name: Delete anonymous connections 
-  mysql_user: 
+- name: Delete anonymous connections
+  mysql_user:
     login_user: "{{ xtradb_root_user }}"
     login_password: "{{ xtradb_root_password }}"
     name: ""
     host_all: yes
     state: absent
 
-- name: Secure the MySQL root user for IPV6 localhost (::1)
-  mysql_user: 
+- name: "Secure the MySQL root user for localhost"
+  mysql_user:
     login_user: "{{ xtradb_root_user }}"
     login_password: "{{ xtradb_root_password }}"
     name: "{{ xtradb_root_user }}"
-    host: "::1"
+    host: "{{ item }}"
+  with_items:
+    - "::1"
+    - "127.0.0.1"
+    - "localhost"
+    - "{{ xtradb_bind_address }}"
 
-- name: Secure the MySQL root user for IPV4 localhost (127.0.0.1)
-  mysql_user: 
-    login_user: "{{ xtradb_root_user }}"
-    login_password: "{{ xtradb_root_password }}"
-    name: "{{ xtradb_root_user }}"
-    host: "127.0.0.1"
-
-- name: Secure the MySQL root user for localhost domain (localhost)
-  mysql_user: 
-    login_user: "{{ xtradb_root_user }}"
-    login_password: "{{ xtradb_root_password }}"
-    name: "{{ xtradb_root_user }}"
-    host: "localhost"
-
-- name: "Secure the MySQL root user for {{ xtradb_bind_address }} domain"
-  mysql_user: 
-    login_user: "{{ xtradb_root_user }}"
-    login_password: "{{ xtradb_root_password }}"
-    name: "{{ xtradb_root_user }}"
-    host: "{{ xtradb_bind_address }}"
 
 - name: Remove the MySQL test database
-  mysql_db: 
+  mysql_db:
     db: test
     login_user: "{{ xtradb_root_user }}"
     login_password: "{{ xtradb_root_password }}"
