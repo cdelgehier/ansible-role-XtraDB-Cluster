@@ -1,0 +1,57 @@
+---
+- name: Create the databases
+  mysql_db:
+    name: "{{ item.name }}"
+    login_user: "{{ xtradb_root_user }}"
+    login_password: "{{ xtradb_root_password }}"
+    state: present
+  with_items: "{{ xtradb_databases }}"
+  register: _db
+
+- name: Copy database init scripts
+  copy:
+    src: "{{ item.item.init_script }}"
+    dest: "/tmp/{{ item.item.init_script | basename }}"
+    mode: "0600"
+  with_items: "{{ _db.results }}"
+  when:
+    - item.changed
+    - item.item.init_script is defined
+    - inventory_hostname == xtradb_master_node
+
+- name: Initialise databases
+  mysql_db:
+    name: "{{ item.item.name }}"
+    state: import
+    target: "/tmp/{{ item.item.init_script | basename }}"
+    login_user: "{{ xtradb_root_user }}"
+    login_password: "{{ xtradb_root_password }}"
+  with_items: "{{ _db.results }}"
+  when:
+    - item.changed
+    - item.item.init_script is defined
+    - inventory_hostname == xtradb_master_node
+
+- name: Delete init scripts from the server
+  file:
+    name: "/tmp/{{ item.item.init_script | basename }}"
+    state: absent
+  with_items: "{{ _db.results }}"
+  when:
+    - item.changed
+    - item.item.init_script is defined
+    - inventory_hostname == xtradb_master_node
+
+- name: Create the users
+  mysql_user:
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    host: "{{ item.host|default('localhost') }}"
+    priv: "{{ item.priv }}"
+    login_user: root
+    login_password: "{{ xtradb_root_password }}"
+    state: present
+  with_items: "{{ xtradb_users }}"
+  when:
+    - inventory_hostname == xtradb_master_node
+...
