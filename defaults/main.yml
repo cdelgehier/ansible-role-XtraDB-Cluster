@@ -22,6 +22,9 @@ xtradb_root_password: root
 # Define Ansible group in which the nodes exist to be part of the cluster
 xtradb_nodes_group: xtradb-cluster-nodes
 
+# Define the node pool 
+xtradb_wsrep_cluster_address: "gcomm://{{ groups[xtradb_nodes_group] | map('extract', hostvars, ['ansible_' ~ xtradb_bind_interface, 'ipv4', 'address']) | join(',') }}"
+
 # Defines the which node should be considered the master in the cluster
 # Used to bootstrap cluster
 xtradb_master_node: "{{ groups[xtradb_nodes_group][0] }}"
