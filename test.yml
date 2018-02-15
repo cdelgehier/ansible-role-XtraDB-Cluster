@@ -47,9 +47,6 @@
           priv: '*.*:GRANT,ALL'
           host: '172.17.0.%'
 
-      xtradb_databases:
-        - name: keystone
-
       xtradb_innodb_buffer_pool_instances: 8
       xtradb_innodb_buffer_pool_size: "384M"
       xtradb_innodb_file_format: "Barracuda"
