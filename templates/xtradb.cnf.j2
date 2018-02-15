@@ -3,58 +3,82 @@
 
 # GENERAL #####
 {% if xtradb_socket %}socket={{ xtradb_socket }}{% endif %}
+
 user={{ xtradb_mysql_user }}
 datadir={{ xtradb_datadir }}
 
 
 {% if xtradb_log_warnings %}log_warnings={{ xtradb_log_warnings }}{% endif %}
+
 {% if xtradb_slow_query_log %}slow_query_log={{ xtradb_slow_query_log }}{% endif %}
+
 {% if xtradb_long_query_time %}long_query_time={{ xtradb_long_query_time }}{% endif %}
 
 {% if xtradb_max_connections %}max_connections={{ xtradb_max_connections }}{% endif %}
+
 {% if xtradb_max_user_connections %}max_user_connections={{ xtradb_max_user_connections }}{% endif %}
+
 {% if xtradb_max_allowed_packet %}max_allowed_packet={{ xtradb_max_allowed_packet }}{% endif %}
+
 {% if xtradb_max_heap_table_size %}max_heap_table_size={{ xtradb_max_heap_table_size }}{% endif %}
 
 {% if xtradb_query_cache_size %}query_cache_size={{ xtradb_query_cache_size }}{% endif %}
+
 {% if xtradb_sort_buffer_size %}sort_buffer_size={{ xtradb_sort_buffer_size }}{% endif %}
+
 {% if xtradb_tmp_table_size %}tmp_table_size={{ xtradb_tmp_table_size }}{% endif %}
+
 {% if xtradb_read_buffer_size %}read_buffer_size={{ xtradb_read_buffer_size }}{% endif %}
+
 {% if xtradb_read_rnd_buffer_size %}read_rnd_buffer_size={{ xtradb_read_rnd_buffer_size }}{% endif %}
+
 {% if xtradb_join_buffer_size %}join_buffer_size={{ xtradb_join_buffer_size }}{% endif %}
+
 {% if xtradb_table_definition_cache %}table_definition_cache={{ xtradb_table_definition_cache }}{% endif %}
+
 {% if xtradb_table_open_cache %}table_open_cache={{ xtradb_table_open_cache }}{% endif %}
+
 {% if xtradb_table_open_cache_instances %}table_open_cache_instances={{ xtradb_table_open_cache_instances }}{% endif %}
 
 {% if xtradb_character_set_server %}character_set_server={{ xtradb_character_set_server }}{% endif %}
 
 {% if xtradb_collation_server %}collation_server={{ xtradb_collation_server }}{% endif %}
 
-# Skip reverse DNS lookup of clients
-{% if xtradb_skip_name_resolve %}skip_name_resolve={{ xtradb_skip_name_resolve }}{% endif %}
+
+{% if xtradb_skip_name_resolve %}# Skip reverse DNS lookup of clients
+skip_name_resolve={{ xtradb_skip_name_resolve }}{% endif %}
 
 {% if xtradb_default_storage_engine %}default_storage_engine={{ xtradb_default_storage_engine }}{% endif %}
 
 
 # INNODB options #####
 {% if xtradb_innodb_strict_mode %}innodb_strict_mode={{ xtradb_innodb_strict_mode }}{% endif %}
+
 {% if xtradb_innodb_file_format_check %}innodb_file_format_check={{ xtradb_innodb_file_format_check }}{% endif %}
+
 {% if xtradb_innodb_file_format %}innodb_file_format={{ xtradb_innodb_file_format }}{% endif %}
+
 {% if xtradb_innodb_buffer_pool_size %}innodb_buffer_pool_size={{ xtradb_innodb_buffer_pool_size }}{% endif %}
+
 {% if xtradb_innodb_buffer_pool_instances %}innodb_buffer_pool_instances={{ xtradb_innodb_buffer_pool_instances }}{% endif %}
+
 {% if xtradb_innodb_file_per_table %}innodb_file_per_table={{ xtradb_innodb_file_per_table }}{% endif %}
+
 {% if xtradb_innodb_flush_log_at_trx_commit %}innodb_flush_log_at_trx_commit={{ xtradb_innodb_flush_log_at_trx_commit }}{% endif %}
+
 {% if xtradb_innodb_log_buffer_size %}innodb_log_buffer_size={{ xtradb_innodb_log_buffer_size }}{% endif %}
+
 {% if xtradb_innodb_log_file_size %}innodb_log_file_size={{ xtradb_innodb_log_file_size }}{% endif %}
 
-# This InnoDB autoincrement locking mode is a requirement for Galera
-{% if xtradb_innodb_autoinc_lock_mode %}innodb_autoinc_lock_mode={{ xtradb_innodb_autoinc_lock_mode }}{% endif %}
+
+{% if xtradb_innodb_autoinc_lock_mode %}# This InnoDB autoincrement locking mode is a requirement for Galera
+innodb_autoinc_lock_mode={{ xtradb_innodb_autoinc_lock_mode }}{% endif %}
 
 
 # REPLICATION SPECIFIC #####
 
-# In order for Galera to work correctly binlog format should be ROW
-{% if xtradb_binlog_format %}binlog_format={{ xtradb_binlog_format }}{% endif %}
+{% if xtradb_binlog_format %}# In order for Galera to work correctly binlog format should be ROW
+binlog_format={{ xtradb_binlog_format }}{% endif %}
 
 
 # WSREP options #####
@@ -80,6 +104,7 @@ wsrep_sst_method=xtrabackup-v2
 # Authentication for SST method
 wsrep_sst_auth={{ xtradb_sst_user }}:{{ xtradb_sst_password }}
 
-# Set ENFORCING to block the use of experimental and unsupported features in Percona XtraDB Cluster
-{% if xtradb_pxc_strict_mode %}pxc_strict_mode={{ xtradb_pxc_strict_mode }}{% endif %}
 
+{% if xtradb_pxc_strict_mode %}# pxc_strict_mode allowed values: DISABLED,PERMISSIVE,ENFORCING,MASTER
+# Set ENFORCING to block the use of experimental and unsupported features in Percona XtraDB Cluster
+pxc_strict_mode={{ xtradb_pxc_strict_mode }}{% endif %}
