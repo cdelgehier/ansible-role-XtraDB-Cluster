@@ -20,7 +20,7 @@ pass='travispw'
 }
 
 @test 'Number of nodes in cluster' {
-  run mysql -ss -u${user} -p${pass} -h ${SUT_IP} -e 'show global status where variable_name = "wsrep_cluster_size"' 
+  run mysql -ss -u${user} -p${pass} -h ${SUT_IP} -e 'show global status where variable_name = "wsrep_cluster_size"'
 
   [ "${status}" -eq "0" ]
   [ "${output}" = "wsrep_cluster_size	3" ]
