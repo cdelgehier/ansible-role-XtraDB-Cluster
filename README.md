@@ -51,8 +51,7 @@ For more info on the values, read the [MariaDB Server System Variables documenta
 | `xtradb_innodb_file_format` | ` ` |  |
 | `xtradb_innodb_file_format_check` | ` ` |  |
 | `xtradb_innodb_file_per_table` | ` ` |  |
-| `xtradb_innodb_flush_log_at_trx_commit` | ` ` | When innodb_flush_log_at_trx_commit is set to 1 the log buffer is flushed on every transaction commit to the log file on disk and provides maximum data integrity but it also has performance impact. Setting it to 2 means log buffer is flushed to OS file cache on every transaction commit. The implication of 2 is optimal and improve performance if you are not concerning ACID and can lose transactions for last second or two in case of OS crashes.
- |
+| `xtradb_innodb_flush_log_at_trx_commit` | ` ` | When innodb_flush_log_at_trx_commit is set to 1 the log buffer is flushed on every transaction commit to the log file on disk and provides maximum data integrity but it also has performance impact. Setting it to 2 means log buffer is flushed to OS file cache on every transaction commit. The implication of 2 is optimal and improve performance if you are not concerning ACID and can lose transactions for last second or two in case of OS crashes.  |
 | `xtradb_innodb_log_buffer_size` | ` ` | Innodb writes changed data record into lt’s log buffer, which kept in memory and it saves disk I/O for large transactions as it not need to write the log of changes to disk before transaction commit. 4 MB – 8 MB is good start unless you write a lot of huge blobs |
 | `xtradb_innodb_log_file_size` | ` ` |  Default value has been changed in MySQL 5.6 to 50 MB from 5 MB (old default), but it’s still too small size for many workloads |
 | `xtradb_innodb_file_per_table` | `on` | innodb_file_per_table is ON by default from MySQL 5.6. This is usually recommended as it avoids having a huge shared tablespace and as it allows you to reclaim space when you drop or truncate a table. Separate tablespace also benefits for Xtrabackup partial backup scheme |
@@ -116,10 +115,7 @@ No dependencies.
 
 ## Example Playbook
 
-<div style="-webkit-column-count: 3; -moz-column-count: 3; column-count: 3; -webkit-column-rule: 1px dotted #e0e0e0; -moz-column-rule: 1px dotted #e0e0e0; column-rule: 1px dotted #e0e0e0;">
-    <div style="display: inline-block;">
-        <h3>xtradb_wsrep_cluster_address & xtradb_bind_address: managed by role</h3>
-        <pre><code class="yaml">
+```yaml
 - hosts: db
   gather_facts: true
   become: true
@@ -132,12 +128,9 @@ No dependencies.
 
       xtradb_nodes_group: "db"
       xtradb_bind_interface: eth0
+```
 
-</code></pre>
-    </div>
-    <div style="display: inline-block;">
-        <h3>xtradb_wsrep_cluster_address & xtradb_bind_address: managed by role</h3>
-        <pre><code class="yaml">
+```yaml
 - hosts: db
   gather_facts: true
   become: true
@@ -151,11 +144,9 @@ No dependencies.
       xtradb_bind_address: "{{ ansible_default_ipv4.address }}"
       xtradb_wsrep_cluster_address: "gcomm://172.17.0.2,172.17.0.3,172.17.0.4"
       xtradb_master_node: "172.17.0.2"
-</code></pre>
-    </div>
-    <div style="display: inline-block;">
-        <h3>With more options</h3>
-        <pre><code class="yaml">
+```
+
+```yaml
 - hosts: db
   gather_facts: true
   become: true
@@ -201,10 +192,7 @@ No dependencies.
       xtradb_table_open_cache_instances: "8"
       xtradb_tmp_table_size: "16M"
 
-</code></pre>
-    </div>
-
-</div>
+```
 
 
 ```ini
