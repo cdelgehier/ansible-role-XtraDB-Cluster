@@ -1,28 +1,79 @@
 #Test playbook for Ansible role
 ---
-#- hosts: localhost
-#  tasks:
-#    - add_host:
-#        hostname: "{{ item.ip }}"
-#        ansible_host: "{{ item.name }}"
-#        groups: db
-#      with_items:
-#        - { name: "node1", ip: "172.17.0.2" }
-#        - { name: "node2", ip: "172.17.0.3" }
-#        - { name: "node3", ip: "172.17.0.4" }
+- name: generate docker DB group
+  hosts: all
+  gather_facts: false
+  tasks:
+    - add_host:
+        name: "{{ item.name }}"
+        ansible_host: "{{ item.ip }}"
+        groups: db
+      with_items:
+        - { name: "node1", ip: "172.17.0.2" }
+        - { name: "node2", ip: "172.17.0.3" }
+        - { name: "node3", ip: "172.17.0.4" }
+      delegate_to: localhost
+      run_once: true
+      changed_when: false
 
-- hosts: all
+- hosts: localhost
   become: true
+  gather_facts: true
   vars:
+    # cookie for systctl in docker
+    docker: "tests"
+  pre_tasks:
+    - name: set python interpreter
+      set_fact:
+        ansible_python_interpreter: /usr/bin/python3
+      when: ansible_os_family == 'Debian'
+
   roles:
     - role: role_under_test
       xtradb_cluster_name: test
       xtradb_sst_user: sstuser
       xtradb_sst_password: s3cr3t
       xtradb_root_password: yolo
-      xtradb_nodes_group: all
-      # tracis doesn't match
-      #xtradb_nodes_group: db
+      xtradb_nodes_group: db
       #xtradb_bind_interface: eth0
-      xtradb_bind_address: "{{ ansible_host }}"
+      xtradb_bind_address: "{{ ansible_default_ipv4.address }}"
+      xtradb_wsrep_cluster_address: "gcomm://172.17.0.2,172.17.0.3,172.17.0.4"
+      xtradb_master_node: "172.17.0.2"
+      xtradb_databases:
+        - name: travisdb
+      xtradb_users:
+        - name: travis
+          password: travispw
+          priv: '*.*:GRANT,ALL'
+          host: '172.17.0.%'
+
+      xtradb_databases:
+        - name: keystone
+
+      xtradb_innodb_buffer_pool_instances: 8
+      xtradb_innodb_buffer_pool_size: "384M"
+      xtradb_innodb_file_format: "Barracuda"
+      xtradb_innodb_file_format_check: "1"
+      xtradb_innodb_file_per_table: "on"
+      xtradb_innodb_flush_log_at_trx_commit: "1"
+      xtradb_innodb_log_buffer_size: "16M"
+      xtradb_innodb_log_file_size: "50M"
+      xtradb_innodb_strict_mode: "on"
+      xtradb_join_buffer_size: "128K"
+      xtradb_log_warnings: "1"
+      xtradb_long_query_time: "10"
+      xtradb_max_allowed_packet: "16M"
+      xtradb_max_connections: "505"
+      xtradb_max_heap_table_size: "16M"
+      xtradb_max_user_connections: "500"
+      xtradb_query_cache_size: "0"   # disable
+      xtradb_read_buffer_size: "128K"
+      xtradb_read_rnd_buffer_size: "256k"
+      xtradb_skip_name_resolve: "1"
+      xtradb_slow_query_log: "1"
+      xtradb_sort_buffer_size: "2M"
+      xtradb_table_definition_cache: "1400"
+      xtradb_table_open_cache: "2000"
+      xtradb_table_open_cache_instances: "8"
+      xtradb_tmp_table_size: "16M"
 ...
