@@ -46,15 +46,16 @@ For more info on the values, read the [MariaDB Server System Variables documenta
 | `xtradb_collation_server` | `utf8_general_ci` | The collation |
 | `xtradb_default_storage_engine` | `InnoDB` | Setting the Storage Engine |
 | `xtradb_innodb_autoinc_lock_mode` | `2` | There are three possible settings for the innodb_autoinc_lock_mode configuration parameter. The settings are 0, 1, or 2, for “traditional”, “consecutive”, or “interleaved” lock mode, respectively |
-| `xtradb_innodb_buffer_pool_instances` | ` ` | To enable multiple buffer pool instances, set the innodb_buffer_pool_instances configuration option to a value greater than 1 (the default) up to 64 (the maximum). This option takes effect only when you set innodb_buffer_pool_size to a size of 1GB or more. The total size you specify is divided among all the buffer pools |
-| `xtradb_innodb_buffer_pool_size` | ` ` | The buffer pool size [doc](https://dev.mysql.com/doc/refman/5.7/en/innodb-buffer-pool-resize.html) |
+| `xtradb_innodb_buffer_pool_instances` | ` ` | To enable multiple buffer pool instances, set the innodb_buffer_pool_instances configuration option to a value greater than 1 (8 is the default) up to 64 (the maximum). This option takes effect only when you set innodb_buffer_pool_size to a size of 1GB or more. The total size you specify is divided among all the buffer pools |
+| `xtradb_innodb_buffer_pool_size` | ` ` | A good value is 70%-80% of available memory. |
 | `xtradb_innodb_file_format` | ` ` |  |
 | `xtradb_innodb_file_format_check` | ` ` |  |
 | `xtradb_innodb_file_per_table` | ` ` |  |
-| `xtradb_innodb_flush_log_at_trx_commit` | ` ` |  |
-| `xtradb_innodb_log_buffer_size` | ` ` |  |
-| `xtradb_innodb_log_file_size` | ` ` |  |
-| `xtradb_innodb_file_per_table` | `on` |  |
+| `xtradb_innodb_flush_log_at_trx_commit` | ` ` | When innodb_flush_log_at_trx_commit is set to 1 the log buffer is flushed on every transaction commit to the log file on disk and provides maximum data integrity but it also has performance impact. Setting it to 2 means log buffer is flushed to OS file cache on every transaction commit. The implication of 2 is optimal and improve performance if you are not concerning ACID and can lose transactions for last second or two in case of OS crashes.
+ |
+| `xtradb_innodb_log_buffer_size` | ` ` | Innodb writes changed data record into lt’s log buffer, which kept in memory and it saves disk I/O for large transactions as it not need to write the log of changes to disk before transaction commit. 4 MB – 8 MB is good start unless you write a lot of huge blobs |
+| `xtradb_innodb_log_file_size` | ` ` |  Default value has been changed in MySQL 5.6 to 50 MB from 5 MB (old default), but it’s still too small size for many workloads |
+| `xtradb_innodb_file_per_table` | `on` | innodb_file_per_table is ON by default from MySQL 5.6. This is usually recommended as it avoids having a huge shared tablespace and as it allows you to reclaim space when you drop or truncate a table. Separate tablespace also benefits for Xtrabackup partial backup scheme |
 | `xtradb_innodb_strict_mode` | `on` |  |
 | `xtradb_join_buffer_size` | ` ` |  |
 | `xtradb_log_warnings` | ` ` |  |
@@ -115,19 +116,97 @@ No dependencies.
 
 ## Example Playbook
 
-```yaml
+<div style="-webkit-column-count: 3; -moz-column-count: 3; column-count: 3; -webkit-column-rule: 1px dotted #e0e0e0; -moz-column-rule: 1px dotted #e0e0e0; column-rule: 1px dotted #e0e0e0;">
+    <div style="display: inline-block;">
+        <h3>xtradb_wsrep_cluster_address & xtradb_bind_address: managed by role</h3>
+        <pre><code class="yaml">
 - hosts: db
   gather_facts: true
   become: true
   roles:
     - role: ansible-role-XtraDB-Cluster
-      xtradb_nodes_group: "db"
       xtradb_cluster_name: "prod-customer"
+      xtradb_sst_user: sstuser
+      xtradb_sst_password: s3cr3t
+      xtradb_root_password: yolo
+
+      xtradb_nodes_group: "db"
       xtradb_bind_interface: eth0
-      xtradb_root_user: root
-      xtradb_root_password: root
-      xtradb_version: 57
-```
+
+</code></pre>
+    </div>
+    <div style="display: inline-block;">
+        <h3>xtradb_wsrep_cluster_address & xtradb_bind_address: managed by role</h3>
+        <pre><code class="yaml">
+- hosts: db
+  gather_facts: true
+  become: true
+  roles:
+    - role: ansible-role-XtraDB-Cluster
+      xtradb_cluster_name: "prod-customer"
+      xtradb_sst_user: sstuser
+      xtradb_sst_password: s3cr3t
+      xtradb_root_password: yolo
+
+      xtradb_bind_address: "{{ ansible_default_ipv4.address }}"
+      xtradb_wsrep_cluster_address: "gcomm://172.17.0.2,172.17.0.3,172.17.0.4"
+      xtradb_master_node: "172.17.0.2"
+</code></pre>
+    </div>
+    <div style="display: inline-block;">
+        <h3>With more options</h3>
+        <pre><code class="yaml">
+- hosts: db
+  gather_facts: true
+  become: true
+  roles:
+    - role: ansible-role-XtraDB-Cluster
+      xtradb_cluster_name: "prod-customer"
+      xtradb_sst_password: s3cr3t
+      xtradb_root_password: yolo
+      xtradb_nodes_group: "db"
+      xtradb_bind_interface: eth0
+
+      xtradb_databases:
+        - name: keystone
+      xtradb_users:
+        - name: keystone
+          password: PASSWD
+          priv: 'keystone.*:GRANT,ALL'
+
+      xtradb_innodb_buffer_pool_instances: 8
+      xtradb_innodb_buffer_pool_size: "384M"
+      xtradb_innodb_file_format: "Barracuda"
+      xtradb_innodb_file_format_check: "1"
+      xtradb_innodb_file_per_table: "on"
+      xtradb_innodb_flush_log_at_trx_commit: "1"
+      xtradb_innodb_log_buffer_size: "16M"
+      xtradb_innodb_log_file_size: "50M"
+      xtradb_innodb_strict_mode: "on"
+      xtradb_join_buffer_size: "128K"
+      xtradb_log_warnings: "1"
+      xtradb_long_query_time: "10"
+      xtradb_max_allowed_packet: "16M"
+      xtradb_max_connections: "505"
+      xtradb_max_heap_table_size: "16M"
+      xtradb_max_user_connections: "500"
+      xtradb_query_cache_size: "0"   # disable
+      xtradb_read_buffer_size: "128K"
+      xtradb_read_rnd_buffer_size: "256k"
+      xtradb_skip_name_resolve: "1"
+      xtradb_slow_query_log: "1"
+      xtradb_sort_buffer_size: "2M"
+      xtradb_table_definition_cache: "1400"
+      xtradb_table_open_cache: "2000"
+      xtradb_table_open_cache_instances: "8"
+      xtradb_tmp_table_size: "16M"
+
+</code></pre>
+    </div>
+
+</div>
+
+
 ```ini
 [db]
 node1 ansible_host=192.168.1.173
