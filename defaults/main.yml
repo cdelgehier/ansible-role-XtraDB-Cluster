@@ -8,12 +8,15 @@ xtradb_datadir: /var/lib/mysql
 xtradb_mysql_user: mysql
 
 # setup cookie
-xtradb_configured: "{{ xtradb_datadir }}/configured"
+xtradb_configured: "{{ xtradb_confdir }}/_configured"
 
 # secure cookie
-xtradb_secured: "{{ xtradb_datadir }}/secured"
+xtradb_secured: "{{ xtradb_confdir }}/_secured"
 
-# Defnes the root user
+# password changed cookie
+xtradb_password_changed: "{{ xtradb_confdir }}/_password_changed"
+
+#ansible_host Defnes the root user
 xtradb_root_user: root
 
 # Defines the root password
@@ -27,7 +30,8 @@ xtradb_wsrep_cluster_address: "gcomm://{{ groups[xtradb_nodes_group] | map('extr
 
 # Defines the which node should be considered the master in the cluster
 # Used to bootstrap cluster
-xtradb_master_node: "{{ groups[xtradb_nodes_group][0] }}"
+#xtradb_master_node: "{{ groups[xtradb_nodes_group][0] }}"
+xtradb_master_node: "{{ groups[xtradb_nodes_group][0] | map('extract', hostvars, ['ansible_' ~ xtradb_bind_interface, 'ipv4', 'address']) | list | first}}"
 
 # Defines the version
 xtradb_version: "57"

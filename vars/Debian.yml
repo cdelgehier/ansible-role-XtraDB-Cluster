@@ -7,8 +7,9 @@ xtradb_repo_filename: "percona"
 xtradb_repo_baseurl: "deb http://repo.percona.com/apt {{ ansible_distribution_release }} main"
 xtradb_repo_gpgkey: 8507EFA5
 
-xtradb_config_file: /etc/mysql/percona-xtradb-cluster.conf.d/wsrep.cnf
 xtradb_wsrep_provider: /usr/lib/libgalera_smm.so
+xtradb_confdir: /etc/mysql/percona-xtradb-cluster.conf.d
+xtradb_config_file: "{{ xtradb_confdir }}/wsrep.cnf"
 xtradb_packages:
   #- "percona-server-server-{{ xtradb_version }}"
   - "percona-xtradb-cluster-{{ xtradb_version }}"

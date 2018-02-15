@@ -25,13 +25,13 @@
     name: "{{ xtradb_service }}@bootstrap.service"
     state: started
   when:
-    - inventory_hostname == xtradb_master_node
+    - xtradb_bind_address == xtradb_master_node
     - ansible_os_family == "RedHat"
 
 - name: Start the master node
   command: /etc/init.d/mysql bootstrap-pxc
   when:
-    - inventory_hostname == xtradb_master_node
+    - xtradb_bind_address == xtradb_master_node
     - ansible_os_family == "Debian"
 
 - name: Create SST user
@@ -42,18 +42,28 @@
     password: "{{ xtradb_sst_password }}"
     priv: "*.*:grant,reload,lock tables,process,replication client"
   when:
-    - inventory_hostname == xtradb_master_node
+    - xtradb_bind_address == xtradb_master_node
 
 - name: Start the slave nodes
   service:
     name: "{{ xtradb_service }}"
     state: started
   when:
-    - inventory_hostname != xtradb_master_node
+    - xtradb_bind_address != xtradb_master_node
+
+- name: include postinstall tasks
+  import_tasks: postinstall.yml
+  tags: configure
+  when:
+    - xtradb_bind_address == xtradb_master_node
 
 - name: Marking as configured
   file:
     path: "{{ xtradb_configured }}"
     state: "touch"
+    owner: root
+    group: root
+    mode: '0400'
+
 
 ...

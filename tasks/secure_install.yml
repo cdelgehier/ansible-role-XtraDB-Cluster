@@ -2,17 +2,26 @@
 - name: Get temporary root password
   shell: grep 'temporary password' /var/log/mysqld.log | awk '{print $NF}'
   register: "_xtradb_root_temp_password"
+  when:
+    - not _xtradb_password_changed.stat.exists
+#  args:
+#    creates: "{{ xtradb_password_changed }}"
+
 
 - name: Set the MySQL root password
   shell: 'mysqladmin -u root --password="{{ _xtradb_root_temp_password.stdout }}" password "{{ xtradb_root_password }}"'
+  when:
+    - not _xtradb_password_changed.stat.exists
+#  args:
+#    creates: "{{ xtradb_password_changed }}"
 
-#- name: Set the root password.
-#  mysql_user:
-#    login_user: "{{ xtradb_root_user }}"
-#    login_password: "{{ _xtradb_root_temp_password.stdout }}"
-#    name: root
-#    host: localhost
-#    password: "{{ xtradb_root_password }}"
+- name: Marking as password is changed
+  file:
+    path: "{{ xtradb_password_changed }}"
+    state: "touch"
+    owner: root
+    group: root
+    mode: '0400'
 
 - name: Delete anonymous connections
   mysql_user:
@@ -43,19 +52,12 @@
     state: absent
 
 
-#- name: Secure Mysql
-#  shell: |
-#    mysql -v -u '{{ xtradb_root_user }}' -p'{{ xtradb_root_password }}' -h 127.0.0.1 -e "DELETE FROM mysql.user WHERE User='';"
-#    mysql -v -u '{{ xtradb_root_user }}' -p'{{ xtradb_root_password }}' -h 127.0.0.1 -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
-#    mysql -v -u '{{ xtradb_root_user }}' -p'{{ xtradb_root_password }}' -h 127.0.0.1 -e "DROP DATABASE test;"
-#    mysql -v -u '{{ xtradb_root_user }}' -p'{{ xtradb_root_password }}' -h 127.0.0.1 -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\_%';"
-#    mysql -v -u '{{ xtradb_root_user }}' -p'{{ xtradb_root_password }}' -h 127.0.0.1 -e "FLUSH PRIVILEGES;"
-#    #mysql -v -u '{{ xtradb_root_user }}' -p'{{ xtradb_root_password }}' -h 127.0.0.1 -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'127.0.0.1' IDENTIFIED BY '{{ xtradb_root_password }}';"
-#    #mysql -v -u '{{ xtradb_root_user }}' -p'{{ xtradb_root_password }}' -h 127.0.0.1 -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'::1' IDENTIFIED BY '{{ xtradb_root_password }}';"
-#    #mysql -v -u '{{ xtradb_root_user }}' -p'{{ xtradb_root_password }}' -h 127.0.0.1 -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY '{{ xtradb_root_password }}';"
-#
 - name: Marking as secured
   file:
     path: "{{ xtradb_secured }}"
     state: "touch"
+    owner: root
+    group: root
+    mode: '0400'
+
 ...

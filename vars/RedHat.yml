@@ -11,8 +11,9 @@ xtradb_repo_enabled: yes
 xtradb_repo_gpgcheck: yes
 xtradb_repo_gpgkey: "https://www.percona.com/downloads/RPM-GPG-KEY-percona"
 
-xtradb_config_file: /etc/percona-xtradb-cluster.conf.d/wsrep.cnf
 xtradb_wsrep_provider: /usr/lib64/galera3/libgalera_smm.so
+xtradb_confdir: /etc/percona-xtradb-cluster.conf.d
+xtradb_config_file: "{{ xtradb_confdir}}/wsrep.cnf"
 xtradb_packages:
   - "Percona-XtraDB-Cluster-{{ xtradb_version }}"
   - MySQL-python

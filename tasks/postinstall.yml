@@ -17,7 +17,6 @@
   when:
     - item.changed
     - item.item.init_script is defined
-    - inventory_hostname == xtradb_master_node
 
 - name: Initialise databases
   mysql_db:
@@ -30,7 +29,6 @@
   when:
     - item.changed
     - item.item.init_script is defined
-    - inventory_hostname == xtradb_master_node
 
 - name: Delete init scripts from the server
   file:
@@ -40,7 +38,6 @@
   when:
     - item.changed
     - item.item.init_script is defined
-    - inventory_hostname == xtradb_master_node
 
 - name: Create the users
   mysql_user:
@@ -52,6 +49,4 @@
     login_password: "{{ xtradb_root_password }}"
     state: present
   with_items: "{{ xtradb_users }}"
-  when:
-    - inventory_hostname == xtradb_master_node
 ...
