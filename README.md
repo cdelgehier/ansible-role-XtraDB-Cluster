@@ -141,9 +141,9 @@ No dependencies.
       xtradb_sst_password: s3cr3t
       xtradb_root_password: yolo
 
-			xtradb_bind_address: "{{ ansible_default_ipv4.address }}"
-			xtradb_wsrep_cluster_address: "gcomm://{{ groups['db'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | join(',') }}"
-			xtradb_master_node: "{{ hostvars[ groups['db'][0] ].ansible_default_ipv4.address }}"
+      xtradb_bind_address: "{{ ansible_default_ipv4.address }}"
+      xtradb_wsrep_cluster_address: "gcomm://{{ groups['db'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | join(',') }}"
+      xtradb_master_node: "{{ hostvars[ groups['db'][0] ].ansible_default_ipv4.address }}"
 
 ```
 
