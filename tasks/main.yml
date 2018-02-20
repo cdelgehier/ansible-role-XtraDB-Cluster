@@ -46,7 +46,7 @@
     enabled: true
   tags: install
   when:
-    - not _xtradb_configured.stat.exists
+    - not _xtradb_secured.stat.exists
 
 
 - name: include secure tasks
