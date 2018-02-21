@@ -51,12 +51,6 @@
   when:
     - xtradb_bind_address != xtradb_master_node
 
-- name: include postinstall tasks
-  import_tasks: postinstall.yml
-  tags: configure
-  when:
-    - xtradb_bind_address == xtradb_master_node
-
 - name: Marking as configured
   file:
     path: "{{ xtradb_configured }}"
