@@ -1,6 +1,6 @@
 ---
 - name: Get temporary root password
-  shell: grep 'temporary password' /var/log/mysqld.log | awk '{print $NF} | tail -n 1'
+  shell: grep 'temporary password' /var/log/mysqld.log | awk '{print $NF}' | tail -n 1
   register: "_xtradb_root_temp_password"
   when:
     - not _xtradb_password_changed.stat.exists
