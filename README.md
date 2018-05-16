@@ -209,11 +209,13 @@ There are two types of test environments available. One powered by Vagrant, anot
 
 - Docker: [docker-tests](https://github.com/cdelgehier/ansible-role-XtraDB-Cluster/tree/docker-tests)
 
-## Remove
+## Remove
 
 To remove alltraces and start a new install 
-`ansible  db -m shell -a 'rm -rf /var/lib/mysql /var/log/mysqld.log /etc/percona-xtradb-cluster.conf.d ; yum remove Percona* -y'`
 
+```
+ansible  db -m shell -a 'rm -rf /var/lib/mysql /var/log/mysqld.log /etc/percona-xtradb-cluster.conf.d ; yum remove Percona* -y'
+```
 ## Contributing
 
 Issues, feature requests, ideas are appreciated and can be posted in the Issues section.
