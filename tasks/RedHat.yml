@@ -1,9 +1,15 @@
 # tasks for Red Hat Familly
 ---
-- name: Disable SELinux
-  selinux:
-    state: disabled
-  when: ansible_selinux.status == 'enabled'
+- name: installs policycoreutils-python
+  package:
+    name: policycoreutils-python
+    state: present
+
+- name: allow mysql to start (SELinux)
+  selinux_permissive:
+    name: mysqld_t
+    permissive: true
+  when: ansible_selinux.status == "enabled"
 
 - name: repository installation
   yum_repository:
