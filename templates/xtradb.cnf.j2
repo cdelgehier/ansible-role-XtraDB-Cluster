@@ -86,6 +86,9 @@ binlog_format={{ xtradb_binlog_format }}{% endif %}
 # Path to Galera library
 wsrep_provider={{ xtradb_wsrep_provider }}
 
+{% if xtradb_wsrep_provider_options %}# 
+wsrep_provider_options="{{ xtradb_wsrep_provider_options | join(';') }}"{% endif %}
+
 # Node address
 wsrep_node_address={{ xtradb_bind_address }}
 

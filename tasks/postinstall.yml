@@ -42,10 +42,10 @@
 - name: Create the users
   mysql_user:
     name: "{{ item.name }}"
-    password: "{{ item.password }}"
-    host: "{{ item.host|default('localhost') }}"
+    password: "{{ item.password | default(omit) }}"
+    host: "{{ item.host | default('localhost') }}"
     priv: "{{ item.priv }}"
-    append_privs: "{{ item.append_privs|default('no') }}"
+    append_privs: "{{ item.append_privs | default(omit) }}"
     login_user: root
     login_password: "{{ xtradb_root_password }}"
     state: present
