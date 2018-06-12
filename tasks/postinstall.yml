@@ -9,7 +9,7 @@
   register: _db
 
 - name: Copy database init scripts
-  copy:
+  template:
     src: "{{ item.item.init_script }}"
     dest: "/tmp/{{ item.item.init_script | basename }}"
     mode: "0600"
