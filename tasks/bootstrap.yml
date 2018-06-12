@@ -24,6 +24,7 @@
   service:
     name: "{{ xtradb_service }}@bootstrap.service"
     state: started
+    enabled: yes
   when:
     - xtradb_bind_address == xtradb_master_node
     - ansible_os_family == "RedHat"
@@ -48,6 +49,7 @@
   service:
     name: "{{ xtradb_service }}"
     state: started
+    enabled: yes
   when:
     - xtradb_bind_address != xtradb_master_node
 
