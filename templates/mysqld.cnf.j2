@@ -1,5 +1,19 @@
 # {{ ansible_managed }}
+[client]
+socket=/var/lib/mysql/mysql.sock
+
 [mysqld]
+server-id=1
+datadir=/var/lib/mysql
+socket=/var/lib/mysql/mysql.sock
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid
+log-bin
+log_slave_updates
+expire_logs_days=7
+
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links=0
 
 # GENERAL #####
 {% if xtradb_socket %}socket={{ xtradb_socket }}{% endif %}
@@ -80,34 +94,3 @@ innodb_autoinc_lock_mode={{ xtradb_innodb_autoinc_lock_mode }}{% endif %}
 {% if xtradb_binlog_format %}# In order for Galera to work correctly binlog format should be ROW
 binlog_format={{ xtradb_binlog_format }}{% endif %}
 
-
-# WSREP options #####
-
-# Path to Galera library
-wsrep_provider={{ xtradb_wsrep_provider }}
-
-{% if xtradb_wsrep_provider_options %}# 
-wsrep_provider_options="{{ xtradb_wsrep_provider_options | join(';') }}"{% endif %}
-
-# Node address
-wsrep_node_address={{ xtradb_bind_address }}
-
-# Node name
-wsrep_node_name={{ ansible_hostname }}
-
-# Cluster name
-wsrep_cluster_name={{ xtradb_cluster_name }}
-
-# Cluster connection URL contains the IPs of node#1, node#2 and node#3
-wsrep_cluster_address={{ xtradb_wsrep_cluster_address }}
-
-# SST method
-wsrep_sst_method=xtrabackup-v2
-
-# Authentication for SST method
-wsrep_sst_auth={{ xtradb_sst_user }}:{{ xtradb_sst_password }}
-
-
-{% if xtradb_pxc_strict_mode %}# pxc_strict_mode allowed values: DISABLED,PERMISSIVE,ENFORCING,MASTER
-# Set ENFORCING to block the use of experimental and unsupported features in Percona XtraDB Cluster
-pxc_strict_mode={{ xtradb_pxc_strict_mode }}{% endif %}

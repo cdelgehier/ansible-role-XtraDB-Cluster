@@ -1,0 +1,30 @@
+# WSREP options #####
+
+# Path to Galera library
+wsrep_provider={{ xtradb_wsrep_provider }}
+
+{% if xtradb_wsrep_provider_options %}# 
+wsrep_provider_options="{{ xtradb_wsrep_provider_options | join(';') }}"{% endif %}
+
+# Node address
+wsrep_node_address={{ xtradb_bind_address }}
+
+# Node name
+wsrep_node_name={{ ansible_hostname }}
+
+# Cluster name
+wsrep_cluster_name={{ xtradb_cluster_name }}
+
+# Cluster connection URL contains the IPs of node#1, node#2 and node#3
+wsrep_cluster_address={{ xtradb_wsrep_cluster_address }}
+
+# SST method
+wsrep_sst_method=xtrabackup-v2
+
+# Authentication for SST method
+wsrep_sst_auth={{ xtradb_sst_user }}:{{ xtradb_sst_password }}
+
+
+{% if xtradb_pxc_strict_mode %}# pxc_strict_mode allowed values: DISABLED,PERMISSIVE,ENFORCING,MASTER
+# Set ENFORCING to block the use of experimental and unsupported features in Percona XtraDB Cluster
+pxc_strict_mode={{ xtradb_pxc_strict_mode }}{% endif %}
