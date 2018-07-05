@@ -1,20 +1,4 @@
-# {{ ansible_managed }}
-[client]
-socket=/var/lib/mysql/mysql.sock
-
 [mysqld]
-server-id=1
-datadir=/var/lib/mysql
-socket=/var/lib/mysql/mysql.sock
-log-error=/var/log/mysqld.log
-pid-file=/var/run/mysqld/mysqld.pid
-log-bin
-log_slave_updates
-expire_logs_days=7
-
-# Disabling symbolic-links is recommended to prevent assorted security risks
-symbolic-links=0
-
 # GENERAL #####
 {% if xtradb_socket %}socket={{ xtradb_socket }}{% endif %}
 
@@ -57,6 +41,8 @@ datadir={{ xtradb_datadir }}
 {% if xtradb_character_set_server %}character_set_server={{ xtradb_character_set_server }}{% endif %}
 
 {% if xtradb_collation_server %}collation_server={{ xtradb_collation_server }}{% endif %}
+
+{% if xtradb_wait_timeout %}wait_timeout={{ xtradb_wait_timeout }}{% endif %}
 
 
 {% if xtradb_skip_name_resolve %}# Skip reverse DNS lookup of clients
