@@ -15,4 +15,8 @@
   apt:
     update_cache: yes
   changed_when: false
+
+- name: Install python-mysqldb
+  apt:
+    name: python-mysqldb
 ...
