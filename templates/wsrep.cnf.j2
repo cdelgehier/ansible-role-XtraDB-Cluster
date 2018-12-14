@@ -1,31 +1,46 @@
+[mysqld_safe]
+service_startup_timeout=90000
+
 [mysqld]
-# WSREP options #####
 
 # Path to Galera library
 wsrep_provider={{ xtradb_wsrep_provider }}
 
+# In order for Galera to work correctly binlog format should be ROW
+binlog_format={{xtradb_binlog_format}}
+
 {% if xtradb_wsrep_provider_options %}# 
 wsrep_provider_options="{{ xtradb_wsrep_provider_options | join(';') }}"{% endif %}
-
-# Node address
-wsrep_node_address={{ xtradb_bind_address }}
-
-# Node name
-wsrep_node_name={{ ansible_hostname }}
 
 # Cluster name
 wsrep_cluster_name={{ xtradb_cluster_name }}
 
-# Cluster connection URL contains the IPs of node#1, node#2 and node#3
+# Cluster connection URL contains IPs of nodes
+#If no IP is found, this implies that a new cluster needs to be created,
+#in order to do that you need to bootstrap this node
 wsrep_cluster_address={{ xtradb_wsrep_cluster_address }}
+
+# Node address
+wsrep_node_address={{ xtradb_bind_address }}
+
+#If wsrep_node_name is not specified,  then system hostname will be used
+wsrep_node_name={{ ansible_hostname }}
+
+
+{% if xtradb_wsrep_slave_threads %}# Slave thread to use
+wsrep_slave_threads={{wsrep_slave_threads}}{% endif %}
+
+wsrep_log_conflicts
+
+# This changes how InnoDB autoincrement locks are managed and is a requirement for Galera
+innodb_autoinc_lock_mode=2
+
+{% if xtradb_pxc_strict_mode %}# pxc_strict_mode allowed values: DISABLED,PERMISSIVE,ENFORCING,MASTER
+# Set ENFORCING to block the use of experimental and unsupported features in Percona XtraDB Cluster
+pxc_strict_mode={{ xtradb_pxc_strict_mode }}{% endif %}
 
 # SST method
 wsrep_sst_method=xtrabackup-v2
 
 # Authentication for SST method
 wsrep_sst_auth={{ xtradb_sst_user }}:{{ xtradb_sst_password }}
-
-
-{% if xtradb_pxc_strict_mode %}# pxc_strict_mode allowed values: DISABLED,PERMISSIVE,ENFORCING,MASTER
-# Set ENFORCING to block the use of experimental and unsupported features in Percona XtraDB Cluster
-pxc_strict_mode={{ xtradb_pxc_strict_mode }}{% endif %}
