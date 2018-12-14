@@ -2,15 +2,13 @@
 service_startup_timeout=90000
 
 [mysqld]
-
 # Path to Galera library
 wsrep_provider={{ xtradb_wsrep_provider }}
 
 # In order for Galera to work correctly binlog format should be ROW
 binlog_format={{xtradb_binlog_format}}
 
-{% if xtradb_wsrep_provider_options %}# 
-wsrep_provider_options="{{ xtradb_wsrep_provider_options | join(';') }}"{% endif %}
+{% if xtradb_wsrep_provider_options %}wsrep_provider_options="{{ xtradb_wsrep_provider_options | join(';') }}"{% endif %}
 
 # Cluster name
 wsrep_cluster_name={{ xtradb_cluster_name }}
@@ -28,7 +26,7 @@ wsrep_node_name={{ ansible_hostname }}
 
 
 {% if xtradb_wsrep_slave_threads %}# Slave thread to use
-wsrep_slave_threads={{wsrep_slave_threads}}{% endif %}
+wsrep_slave_threads={{xtradb_wsrep_slave_threads}}{% endif %}
 
 wsrep_log_conflicts
 
