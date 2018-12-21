@@ -74,7 +74,7 @@ log-error={{xtradb_log_error}}
 
 {% if xtradb_innodb_buffer_pool_load_at_startup %}innodb_buffer_pool_load_at_startup={{ xtradb_innodb_buffer_pool_load_at_startup }}{% endif %}
 
-{% if xtradb_innodb_buffer_pool_load_at_shutdown %}innodb_buffer_pool_load_at_shutdown={{ xtradb_innodb_buffer_pool_load_at_shutdown }}{% endif %}
+{% if xtradb_innodb_buffer_pool_dump_at_shutdown %}innodb_buffer_pool_dump_at_shutdown={{ xtradb_innodb_buffer_pool_dump_at_shutdown }}{% endif %}
 
 {% if xtradb_innodb_buffer_pool_size %}innodb_buffer_pool_size={{ xtradb_innodb_buffer_pool_size }}{% endif %}
 
@@ -97,7 +97,7 @@ innodb_autoinc_lock_mode={{ xtradb_innodb_autoinc_lock_mode }}{% endif %}
 # Others
 server-id=1
 pid-file=/var/run/mysqld/mysqld.pid
-log-bin
+log-bin = {{ ansible_hostname }}-bin
 sync_binlog = 0
 log_slave_updates
 expire_logs_days=3
