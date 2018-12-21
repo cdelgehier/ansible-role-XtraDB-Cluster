@@ -96,7 +96,7 @@ xtradb_table_open_cache: ""
 xtradb_table_open_cache_instances: ""
 
 # Logs
-xtradb_log_error: /var/log/mysql/mysqld.log
+xtradb_log_error: /var/log/mysqld.log
 xtradb_log_warnings: ""
 xtradb_slow_query_log: "0"
 xtradb_long_query_time: ""
