@@ -40,12 +40,24 @@
   tags: install
 
 - name: Generate configuration
-  template:
-    src:  mysqld.cnf.j2
-    dest: "{{ xtradb_confdir }}/mysqld.cnf"
-    owner: root
-    group: root
-    mode: 0644
+  block:
+    - name: Generate mysqld configuration
+      template:
+        src:  mysqld.cnf.j2
+        dest: "{{ xtradb_confdir }}/mysqld.cnf"
+        owner: root
+        group: root
+        mode: 0644
+        backup: true
+    
+    - name: Generate wsrep configuration
+      template:
+        src:  wsrep.cnf.j2
+        dest: "{{ xtradb_config_file }}"
+        owner: root
+        group: root
+        mode: 0644
+        backup: true
 
 - name: Ensure service is started
   service:

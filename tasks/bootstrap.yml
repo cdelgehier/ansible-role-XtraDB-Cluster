@@ -4,14 +4,6 @@
     name: "{{ xtradb_service }}"
     state: stopped
 
-- name: Generate configuration
-  template:
-    src:  wsrep.cnf.j2
-    dest: "{{ xtradb_config_file }}"
-    owner: root
-    group: root
-    mode: 0644
-
 - name: Configure swappiness
   sysctl:
     name: vm.swappiness
