@@ -94,6 +94,7 @@ xtradb_join_buffer_size: ""
 xtradb_table_definition_cache: ""
 xtradb_table_open_cache: ""
 xtradb_table_open_cache_instances: ""
+xtradb_open_files_limit: ""
 
 # Logs
 xtradb_log_error: /var/log/mysqld.log

@@ -49,6 +49,7 @@ datadir={{ xtradb_datadir }}
 
 {% if xtradb_table_open_cache_instances %}table_open_cache_instances={{ xtradb_table_open_cache_instances }}{% endif %}
 
+{% if xtradb_open_files_limit %}open-files-limit={{ xtradb_open_files_limit }}{% endif %}
 
 # Logs
 log-error={{xtradb_log_error}}
@@ -114,3 +115,6 @@ skip_name_resolve={{ xtradb_skip_name_resolve }}{% endif %}
 {% if xtradb_default_storage_engine %}default_storage_engine={{ xtradb_default_storage_engine }}{% endif %}
 
 {% if xtradb_event_scheduler %}event_scheduler={{ xtradb_event_scheduler }}{% endif %}
+
+{% if xtradb_open_files_limit %}[xtrabackup]
+open-files-limit={{ xtradb_open_files_limit }}{% endif %}
