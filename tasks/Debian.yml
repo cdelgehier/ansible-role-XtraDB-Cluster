@@ -18,5 +18,9 @@
 
 - name: Install python-mysqldb
   apt:
-    name: python-mysqldb
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - python-mysqldb
+    - dirmngr
 ...
