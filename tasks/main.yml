@@ -13,13 +13,13 @@
   register: "_xtradb_configured"
   tags: install
 
-- name: Cheking if XtraDB cluster is already secured
+- name: Checking if XtraDB cluster is already secured
   stat:
     path: "{{ xtradb_secured }}"
   register: "_xtradb_secured"
   tags: install
 
-- name: Cheking if XtraDB cluster is already configured with the password
+- name: Checking if XtraDB cluster is already configured with the password
   stat:
     path: "{{ xtradb_password_changed }}"
   register: "_xtradb_password_changed"
