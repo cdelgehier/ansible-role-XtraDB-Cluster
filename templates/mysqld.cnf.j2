@@ -5,95 +5,137 @@ user={{ xtradb_mysql_user }}
 datadir={{ xtradb_datadir }}
 
 # Network
-{% if xtradb_connect_timeout %}connect_timeout={{ xtradb_connect_timeout }}{% endif %}
-
-{% if xtradb_wait_timeout %}wait_timeout={{ xtradb_wait_timeout }}{% endif %}
-
-{% if xtradb_interactive_timeout %}interactive_timeout={{ xtradb_interactive_timeout }}{% endif %}
-
-{% if xtradb_max_connections %}max_connections={{ xtradb_max_connections }}{% endif %}
-
-{% if xtradb_max_connect_errors %}max_connect_errors={{ xtradb_max_connect_errors }}{% endif %}
-
-{% if xtradb_max_user_connections %}max_user_connections={{ xtradb_max_user_connections }}{% endif %}
-
-{% if xtradb_max_allowed_packet %}max_allowed_packet={{ xtradb_max_allowed_packet }}{% endif %}
-
+{% if xtradb_connect_timeout -%}
+connect_timeout={{ xtradb_connect_timeout }}
+{% endif -%}
+{% if xtradb_wait_timeout -%}
+wait_timeout={{ xtradb_wait_timeout }}
+{% endif -%}
+{% if xtradb_interactive_timeout -%}
+interactive_timeout={{ xtradb_interactive_timeout }}
+{% endif -%}
+{% if xtradb_max_connections -%}
+max_connections={{ xtradb_max_connections }}
+{% endif -%}
+{% if xtradb_max_connect_errors -%}
+max_connect_errors={{ xtradb_max_connect_errors }}
+{% endif -%}
+{% if xtradb_max_user_connections -%}
+max_user_connections={{ xtradb_max_user_connections }}
+{% endif -%}
+{% if xtradb_max_allowed_packet -%}
+max_allowed_packet={{ xtradb_max_allowed_packet }}
+{% endif %}
 
 # Limits
-{% if xtradb_tmp_table_size %}tmp_table_size={{ xtradb_tmp_table_size }}{% endif %}
-
-{% if xtradb_max_heap_table_size %}max_heap_table_size={{ xtradb_max_heap_table_size }}{% endif %}
-
-{% if xtradb_thread_cache_size %}thread_cache_size={{ xtradb_thread_cache_size }}{% endif %}
-
-{% if xtradb_thread_pool_size %}thread_pool_size={{ xtradb_thread_pool_size }}{% endif %}
-
-{% if xtradb_query_cache_type %}query_cache_type={{ xtradb_query_cache_type }}{% endif %}
-
-{% if xtradb_query_cache_size %}query_cache_size={{ xtradb_query_cache_size }}{% endif %}
-
-{% if xtradb_query_cache_limit %}query_cache_limit={{ xtradb_query_cache_limit }}{% endif %}
-
-{% if xtradb_sort_buffer_size %}sort_buffer_size={{ xtradb_sort_buffer_size }}{% endif %}
-
-{% if xtradb_read_buffer_size %}read_buffer_size={{ xtradb_read_buffer_size }}{% endif %}
-
-{% if xtradb_read_rnd_buffer_size %}read_rnd_buffer_size={{ xtradb_read_rnd_buffer_size }}{% endif %}
-
-{% if xtradb_join_buffer_size %}join_buffer_size={{ xtradb_join_buffer_size }}{% endif %}
-
-{% if xtradb_table_definition_cache %}table_definition_cache={{ xtradb_table_definition_cache }}{% endif %}
-
-{% if xtradb_table_open_cache %}table_open_cache={{ xtradb_table_open_cache }}{% endif %}
-
-{% if xtradb_table_open_cache_instances %}table_open_cache_instances={{ xtradb_table_open_cache_instances }}{% endif %}
-
-{% if xtradb_open_files_limit %}open-files-limit={{ xtradb_open_files_limit }}{% endif %}
+{% if xtradb_tmp_table_size -%}
+tmp_table_size={{ xtradb_tmp_table_size }}
+{% endif -%}
+{% if xtradb_max_heap_table_size -%}
+max_heap_table_size={{ xtradb_max_heap_table_size }}
+{% endif -%}
+{% if xtradb_thread_cache_size -%}
+thread_cache_size={{ xtradb_thread_cache_size }}
+{% endif -%}
+{% if xtradb_thread_pool_size -%}
+thread_pool_size={{ xtradb_thread_pool_size }}
+{% endif -%}
+{% if xtradb_query_cache_type -%}
+query_cache_type={{ xtradb_query_cache_type }}
+{% endif -%}
+{% if xtradb_query_cache_size -%}
+query_cache_size={{ xtradb_query_cache_size }}
+{% endif -%}
+{% if xtradb_query_cache_limit -%}
+query_cache_limit={{ xtradb_query_cache_limit }}
+{% endif -%}
+{% if xtradb_sort_buffer_size -%}
+sort_buffer_size={{ xtradb_sort_buffer_size }}
+{% endif -%}
+{% if xtradb_read_buffer_size -%}
+read_buffer_size={{ xtradb_read_buffer_size }}
+{% endif -%}
+{% if xtradb_read_rnd_buffer_size -%}
+ead_rnd_buffer_size={{ xtradb_read_rnd_buffer_size }}
+{% endif -%}
+{% if xtradb_join_buffer_size -%}
+join_buffer_size={{ xtradb_join_buffer_size }}
+{% endif -%}
+{% if xtradb_table_definition_cache -%}
+table_definition_cache={{ xtradb_table_definition_cache }}
+{% endif -%}
+{% if xtradb_table_open_cache -%}
+table_open_cache={{ xtradb_table_open_cache }}
+{% endif -%}
+{% if xtradb_table_open_cache_instances -%}
+table_open_cache_instances={{ xtradb_table_open_cache_instances }}
+{% endif -%}
+{% if xtradb_open_files_limit -%}
+open-files-limit={{ xtradb_open_files_limit }}
+{% endif %}
 
 # Logs
 log-error={{xtradb_log_error}}
-{% if xtradb_log_warnings %}log_warnings={{ xtradb_log_warnings }}{% endif %}
-
-{% if xtradb_slow_query_log %}slow_query_log={{ xtradb_slow_query_log }}{% endif %}
-
-{% if xtradb_long_query_time %}long_query_time={{ xtradb_long_query_time }}{% endif %}
-
+{% if xtradb_log_warnings -%}
+log_warnings={{ xtradb_log_warnings }}
+{% endif -%}
+{% if xtradb_slow_query_log -%}
+slow_query_log={{ xtradb_slow_query_log }}
+{% endif -%}
+{% if xtradb_long_query_time -%}
+long_query_time={{ xtradb_long_query_time }}
+{% endif %}
 
 # InnoDB
-{% if xtradb_innodb_read_io_threads %}innodb_read_io_threads={{ xtradb_innodb_read_io_threads }}{% endif %}
-
-{% if xtradb_innodb_write_io_threads %}innodb_write_io_threads={{ xtradb_innodb_write_io_threads }}{% endif %}
-
-{% if xtradb_innodb_io_capacity %}innodb_io_capacity={{ xtradb_innodb_io_capacity }}{% endif %}
-
-{% if xtradb_innodb_strict_mode %}innodb_strict_mode={{ xtradb_innodb_strict_mode }}{% endif %}
-
-{% if xtradb_innodb_file_format_check %}innodb_file_format_check={{ xtradb_innodb_file_format_check }}{% endif %}
-
-{% if xtradb_innodb_file_format %}innodb_file_format={{ xtradb_innodb_file_format }}{% endif %}
-
-{% if xtradb_innodb_buffer_pool_load_at_startup %}innodb_buffer_pool_load_at_startup={{ xtradb_innodb_buffer_pool_load_at_startup }}{% endif %}
-
-{% if xtradb_innodb_buffer_pool_dump_at_shutdown %}innodb_buffer_pool_dump_at_shutdown={{ xtradb_innodb_buffer_pool_dump_at_shutdown }}{% endif %}
-
-{% if xtradb_innodb_buffer_pool_size %}innodb_buffer_pool_size={{ xtradb_innodb_buffer_pool_size }}{% endif %}
-
-{% if xtradb_innodb_buffer_pool_instances %}innodb_buffer_pool_instances={{ xtradb_innodb_buffer_pool_instances }}{% endif %}
-
-{% if xtradb_innodb_file_per_table %}innodb_file_per_table={{ xtradb_innodb_file_per_table }}{% endif %}
-
-{% if xtradb_innodb_flush_method%}innodb_flush_method={{ xtradb_innodb_flush_method }}{% endif %}
-
-{% if xtradb_innodb_flush_log_at_trx_commit %}innodb_flush_log_at_trx_commit={{ xtradb_innodb_flush_log_at_trx_commit }}{% endif %}
-
-{% if xtradb_innodb_log_buffer_size %}innodb_log_buffer_size={{ xtradb_innodb_log_buffer_size }}{% endif %}
-
-{% if xtradb_innodb_log_file_size %}innodb_log_file_size={{ xtradb_innodb_log_file_size }}{% endif %}
-
-{% if xtradb_innodb_autoinc_lock_mode %}# This InnoDB autoincrement locking mode is a requirement for Galera
-innodb_autoinc_lock_mode={{ xtradb_innodb_autoinc_lock_mode }}{% endif %}
-
+{% if xtradb_innodb_read_io_threads -%}
+innodb_read_io_threads={{ xtradb_innodb_read_io_threads }}
+{% endif -%}
+{% if xtradb_innodb_write_io_threads -%}
+innodb_write_io_threads={{ xtradb_innodb_write_io_threads }}
+{% endif -%}
+{% if xtradb_innodb_io_capacity -%}
+innodb_io_capacity={{ xtradb_innodb_io_capacity }}
+{% endif -%}
+{% if xtradb_innodb_strict_mode -%}
+innodb_strict_mode={{ xtradb_innodb_strict_mode }}
+{% endif -%}
+{% if xtradb_innodb_file_format_check -%}
+innodb_file_format_check={{ xtradb_innodb_file_format_check }}
+{% endif -%}
+{% if xtradb_innodb_file_format -%}
+innodb_file_format={{ xtradb_innodb_file_format }}
+{% endif -%}
+{% if xtradb_innodb_buffer_pool_load_at_startup -%}
+innodb_buffer_pool_load_at_startup={{ xtradb_innodb_buffer_pool_load_at_startup }}
+{% endif -%}
+{% if xtradb_innodb_buffer_pool_dump_at_shutdown -%}
+innodb_buffer_pool_dump_at_shutdown={{ xtradb_innodb_buffer_pool_dump_at_shutdown }}
+{% endif -%}
+{% if xtradb_innodb_buffer_pool_size -%}
+innodb_buffer_pool_size={{ xtradb_innodb_buffer_pool_size }}
+{% endif -%}
+{% if xtradb_innodb_buffer_pool_instances -%}
+innodb_buffer_pool_instances={{ xtradb_innodb_buffer_pool_instances }}
+{% endif -%}
+{% if xtradb_innodb_file_per_table -%}
+innodb_file_per_table={{ xtradb_innodb_file_per_table }}
+{% endif -%}
+{% if xtradb_innodb_flush_method%}
+innodb_flush_method={{ xtradb_innodb_flush_method }}
+{% endif -%}
+{% if xtradb_innodb_flush_log_at_trx_commit -%}
+innodb_flush_log_at_trx_commit={{ xtradb_innodb_flush_log_at_trx_commit }}
+{% endif -%}
+{% if xtradb_innodb_log_buffer_size -%}
+innodb_log_buffer_size={{ xtradb_innodb_log_buffer_size }}
+{% endif -%}
+{% if xtradb_innodb_log_file_size -%}
+innodb_log_file_size={{ xtradb_innodb_log_file_size }}
+{% endif -%}
+{% if xtradb_innodb_autoinc_lock_mode -%}
+# This InnoDB autoincrement locking mode is a requirement for Galera
+innodb_autoinc_lock_mode={{ xtradb_innodb_autoinc_lock_mode }}
+{% endif %}
 
 # Others
 server-id=1
@@ -105,16 +147,24 @@ expire_logs_days=3
 # Disabling symbolic-links is recommended to prevent assorted security risks
 symbolic-links=0
 socket={{ xtradb_socket }}
-{% if xtradb_character_set_server %}character_set_server={{ xtradb_character_set_server }}{% endif %}
+{% if xtradb_character_set_server -%}
+character_set_server={{ xtradb_character_set_server }}
+{% endif -%}
+{% if xtradb_collation_server -%}
+collation_server={{ xtradb_collation_server }}
+{% endif -%}
+{% if xtradb_skip_name_resolve -%}
+# Skip reverse DNS lookup of clients
+skip_name_resolve={{ xtradb_skip_name_resolve }}
+{% endif -%}
+{% if xtradb_default_storage_engine -%}
+default_storage_engine={{ xtradb_default_storage_engine }}
+{% endif -%}
+{% if xtradb_event_scheduler -%}
+event_scheduler={{ xtradb_event_scheduler }}
+{% endif %}
 
-{% if xtradb_collation_server %}collation_server={{ xtradb_collation_server }}{% endif %}
-
-{% if xtradb_skip_name_resolve %}# Skip reverse DNS lookup of clients
-skip_name_resolve={{ xtradb_skip_name_resolve }}{% endif %}
-
-{% if xtradb_default_storage_engine %}default_storage_engine={{ xtradb_default_storage_engine }}{% endif %}
-
-{% if xtradb_event_scheduler %}event_scheduler={{ xtradb_event_scheduler }}{% endif %}
-
-{% if xtradb_open_files_limit %}[xtrabackup]
-open-files-limit={{ xtradb_open_files_limit }}{% endif %}
+{% if xtradb_open_files_limit -%}
+[xtrabackup]
+open-files-limit={{ xtradb_open_files_limit }}
+{% endif -%}
