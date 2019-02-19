@@ -80,6 +80,13 @@ innodb_autoinc_lock_mode={{ xtradb_innodb_autoinc_lock_mode }}{% endif %}
 {% if xtradb_binlog_format %}# In order for Galera to work correctly binlog format should be ROW
 binlog_format={{ xtradb_binlog_format }}{% endif %}
 
+{% for db in xtradb_databases %}
+{% if db.replicate|default(1) %}
+binlog_do_db = {{ db.name }}
+{% else %}
+binlog_ignore_db = {{ db.name }}
+{% endif %}
+{% endfor %}
 
 # WSREP options #####
 
