@@ -4,6 +4,9 @@
 # Data directory
 xtradb_datadir: /var/lib/mysql
 
+# Custom SQL mode
+mysql_sql_mode: ''
+
 # Defines the user used
 xtradb_mysql_user: mysql
 

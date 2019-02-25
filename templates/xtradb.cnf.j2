@@ -6,6 +6,9 @@
 
 user={{ xtradb_mysql_user }}
 datadir={{ xtradb_datadir }}
+{% if xtradb_sql_mode %}
+sql_mode = {{ xtradb_sql_mode }}
+{% endif %}
 
 
 {% if xtradb_log_warnings %}log_warnings={{ xtradb_log_warnings }}{% endif %}
