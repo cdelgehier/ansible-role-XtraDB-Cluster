@@ -3,6 +3,7 @@
 
 # GENERAL #####
 {% if xtradb_bind_address %}bind-address={{ xtradb_bind_address }}{% endif %}
+
 {% if xtradb_socket %}socket={{ xtradb_socket }}{% endif %}
 
 user={{ xtradb_mysql_user }}
