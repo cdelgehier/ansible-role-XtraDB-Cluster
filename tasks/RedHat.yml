@@ -11,14 +11,26 @@
     permissive: true
   when: ansible_selinux.status == "enabled"
 
-- name: repository installation
-  yum_repository:
-    file: "{{ xtradb_repo_filename }}" 
-    name: "{{ xtradb_repo_name }}"
-    description: "{{ xtradb_repo_desc }}"
-    baseurl: "{{ xtradb_repo_baseurl }}"
-    gpgkey: "{{ xtradb_repo_gpgkey }}"
-    gpgcheck: "{{ xtradb_repo_gpgcheck }}"
+- block:
+  - name: installs repository
+    yum:
+      name: "{{xtradb_repo_url}}"
+      state: present
+  
+  - name: configures repositories
+    command: percona-release setup pxc"{{ xtradb_version }}"
+    register: result
+    failed_when: 
+      - result.stderr != ""
+      - "'All done' not in result.stderr"
+    changed_when: result.stderr == ""
 
+  when: percona_rhsm_repository is not defined
+
+- name: enable repository
+  rhsm_repository:
+    name: "{{ percona_rhsm_repository }}"
+    state: enabled
+  when: percona_rhsm_repository is defined
 
 ...
