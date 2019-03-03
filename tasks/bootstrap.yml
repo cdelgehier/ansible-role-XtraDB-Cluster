@@ -12,11 +12,20 @@
   when:
     - docker is not defined
 
+- name: Generate wsrep configuration
+  template:
+    src:  wsrep.cnf.j2
+    dest: "{{ xtradb_config_file }}"
+    owner: root
+    group: root
+    mode: 0644
+    backup: true
+  tags: configure
+
 - name: Start the master node
   service:
     name: "{{ xtradb_service }}@bootstrap.service"
     state: started
-    #enabled: yes
   when:
     - xtradb_bind_address == xtradb_master_node
     - ansible_os_family == "RedHat"

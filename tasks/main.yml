@@ -5,83 +5,63 @@
   with_first_found:
     - "{{ ansible_distribution }}.yml"
     - "{{ ansible_os_family }}.yml"
-  tags: install
 
 - name: Checking if XtraDB cluster is already configured
   stat:
     path: "{{ xtradb_configured }}"
   register: "_xtradb_configured"
-  tags: install
 
 - name: Cheking if XtraDB cluster is already secured
   stat:
     path: "{{ xtradb_secured }}"
   register: "_xtradb_secured"
-  tags: install
 
 - name: Cheking if XtraDB cluster is already configured with the password
   stat:
     path: "{{ xtradb_password_changed }}"
   register: "_xtradb_password_changed"
-  tags: install
 
 - name: "Include {{ ansible_distribution }} tasks"
   include_tasks: "{{ item }}"
   with_first_found:
     - "{{ ansible_distribution }}.yml"
     - "{{ ansible_os_family }}.yml"
-  tags: install
 
 - name: Install packages
   package:
     name: "{{ item }}"
     state: installed
   with_items: "{{ xtradb_packages }}"
-  tags: install
 
-- name: Generate configuration
-  block:
-    - name: Generate mysqld configuration
-      template:
-        src:  mysqld.cnf.j2
-        dest: "{{ xtradb_confdir }}/mysqld.cnf"
-        owner: root
-        group: root
-        mode: 0644
-        backup: true
-    
-    - name: Generate wsrep configuration
-      template:
-        src:  wsrep.cnf.j2
-        dest: "{{ xtradb_config_file }}"
-        owner: root
-        group: root
-        mode: 0644
-        backup: true
-
+- name: Generate mysqld configuration
+  template:
+    src:  mysqld.cnf.j2
+    dest: "{{ xtradb_confdir }}/mysqld.cnf"
+    owner: root
+    group: root
+    mode: 0644
+    backup: true
+  tags: configure
+ 
 - name: Ensure service is started
   service:
     name: "{{ xtradb_service }}"
     state: started
     enabled: true
-  tags: install
   when:
     - not _xtradb_secured.stat.exists
 
 - name: include secure tasks
   import_tasks: secure_install.yml
-  tags: install
   when:
     - not _xtradb_secured.stat.exists
 
 - name: include bootstrap tasks
   import_tasks: bootstrap.yml
-  tags: configure
   when:
     - not _xtradb_configured.stat.exists
 
 - name: include postinstall tasks
   import_tasks: postinstall.yml
-  tags: configure
   when:
     - xtradb_bind_address == xtradb_master_node
