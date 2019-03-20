@@ -1,4 +1,3 @@
-# roles/ansible-role-XtraDB-Cluster/tasks/main.yml
 ---
 - name: "Include {{ ansible_distribution }} variables"
   include_vars: "{{ item }}"
@@ -6,62 +5,8 @@
     - "{{ ansible_distribution }}.yml"
     - "{{ ansible_os_family }}.yml"
 
-- name: Checking if XtraDB cluster is already configured
-  stat:
-    path: "{{ xtradb_configured }}"
-  register: "_xtradb_configured"
+- include_tasks: node.yml
+  when: not arbitrator_node
 
-- name: Cheking if XtraDB cluster is already secured
-  stat:
-    path: "{{ xtradb_secured }}"
-  register: "_xtradb_secured"
-
-- name: Cheking if XtraDB cluster is already configured with the password
-  stat:
-    path: "{{ xtradb_password_changed }}"
-  register: "_xtradb_password_changed"
-
-- name: "Include {{ ansible_distribution }} tasks"
-  include_tasks: "{{ item }}"
-  with_first_found:
-    - "{{ ansible_distribution }}.yml"
-    - "{{ ansible_os_family }}.yml"
-
-- name: Install packages
-  package:
-    name: "{{ item }}"
-    state: installed
-  with_items: "{{ xtradb_packages }}"
-
-- name: Generate mysqld configuration
-  template:
-    src:  mysqld.cnf.j2
-    dest: "{{ xtradb_confdir }}/mysqld.cnf"
-    owner: root
-    group: root
-    mode: 0644
-    backup: true
-  tags: configure
- 
-- name: Ensure service is started
-  service:
-    name: "{{ xtradb_service }}"
-    state: started
-    enabled: true
-  when:
-    - not _xtradb_secured.stat.exists
-
-- name: include secure tasks
-  import_tasks: secure_install.yml
-  when:
-    - not _xtradb_secured.stat.exists
-
-- name: include bootstrap tasks
-  import_tasks: bootstrap.yml
-  when:
-    - not _xtradb_configured.stat.exists
-
-- name: include postinstall tasks
-  import_tasks: postinstall.yml
-  when:
-    - xtradb_bind_address == xtradb_master_node
+- include_tasks: arbitrator.yml
+  when: arbitrator_node

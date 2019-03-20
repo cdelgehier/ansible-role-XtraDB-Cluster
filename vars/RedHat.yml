@@ -17,4 +17,10 @@ xtradb_config_file: "{{ xtradb_confdir}}/wsrep.cnf"
 xtradb_packages:
   - "Percona-XtraDB-Cluster-{{ xtradb_version }}"
   - MySQL-python
+
+garb_package:
+  - "Percona-XtraDB-Cluster-garbd-{{ xtradb_version }}"
+
+garb_confdir: /etc/sysconfig/garb
+garb_service: garb
 ...
