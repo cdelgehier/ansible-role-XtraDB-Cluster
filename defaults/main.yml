@@ -26,7 +26,7 @@ xtradb_root_password: root
 xtradb_nodes_group: xtradb-cluster-nodes
 
 # Define the node pool 
-xtradb_wsrep_cluster_address: "gcomm://{{ groups[xtradb_nodes_group] | map('extract', hostvars, ['ansible_' ~ xtradb_bind_interface, 'ipv4', 'address']) | join(',') }}"
+xtradb_wsrep_cluster_address: "{{ groups[xtradb_nodes_group] | map('extract', hostvars, ['ansible_' ~ xtradb_bind_interface, 'ipv4', 'address']) | join(',') }}"
 
 # Defines the which node should be considered the master in the cluster
 # Used to bootstrap cluster
@@ -62,6 +62,7 @@ xtradb_users: []
 # Defines databases to create
 xtradb_databases: []
 
+arbitrator_node: false
 
 # WSRep
 xtradb_pxc_strict_mode: "ENFORCING"

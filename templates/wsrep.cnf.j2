@@ -16,7 +16,7 @@ wsrep_cluster_name={{ xtradb_cluster_name }}
 # Cluster connection URL contains IPs of nodes
 #If no IP is found, this implies that a new cluster needs to be created,
 #in order to do that you need to bootstrap this node
-wsrep_cluster_address={{ xtradb_wsrep_cluster_address }}
+wsrep_cluster_address=gcomm://{{ xtradb_wsrep_cluster_address }}
 
 # Node address
 wsrep_node_address={{ xtradb_bind_address }}

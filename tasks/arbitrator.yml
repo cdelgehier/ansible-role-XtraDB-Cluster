@@ -1,0 +1,22 @@
+---
+- name: Install packages
+  package:
+    name: "{{ item }}"
+    state: installed
+  with_items: "{{ garb_packages }}"
+
+- name: Generate garb configuration
+  template:
+    src:  garb.j2
+    dest: "{{ garb_confdir }}/garb"
+    owner: root
+    group: root
+    mode: 0644
+    backup: true
+  tags: configure
+ 
+- name: Ensure service reload
+  service:
+    name: "{{ garb_service }}"
+    state: reloaded
+    enabled: true
