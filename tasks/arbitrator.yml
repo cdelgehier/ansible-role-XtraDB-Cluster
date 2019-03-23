@@ -15,8 +15,8 @@
     backup: true
   tags: configure
  
-- name: Ensure service is started
+- name: Ensure service reload
   service:
     name: "{{ garb_service }}"
-    state: started
+    state: reloaded
     enabled: true
