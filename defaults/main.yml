@@ -62,8 +62,6 @@ xtradb_users: []
 # Defines databases to create
 xtradb_databases: []
 
-arbitrator_node: false
-
 # WSRep
 xtradb_pxc_strict_mode: "ENFORCING"
 # In order for Galera to work correctly binlog format should be ROW
