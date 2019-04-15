@@ -18,7 +18,7 @@
       state: present
   
   - name: configures repositories
-    command: percona-release setup pxc"{{ xtradb_version }}"
+    command: percona-release enable original
     register: result
     failed_when: 
       - result.stderr != ""

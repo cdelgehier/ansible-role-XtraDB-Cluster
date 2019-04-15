@@ -12,7 +12,7 @@
     - "{{ ansible_os_family }}.yml"
 
 - include_tasks: node.yml
-  when: not arbitrator_node
+  when: not arbitrator_node | d(False)
 
 - include_tasks: arbitrator.yml
-  when: arbitrator_node
+  when: arbitrator_node | d(False)

@@ -9,7 +9,7 @@ GALERA_GROUP="{{ xtradb_cluster_name }}"
 
 # Optional Galera internal options string (e.g. SSL settings)
 # see http://galeracluster.com/documentation-webpages/galeraparameters.html
-GALERA_OPTIONS="{{ xtradb_wsrep_provider_options | join(';') }}"{% endif %}
+{% if xtradb_wsrep_provider_options %}GALERA_OPTIONS="{{ xtradb_wsrep_provider_options | join(';') }}"{% endif %}
 
 # Log file for garbd. Optional, by default logs to syslog
 # Deprecated for CentOS7, use journalctl to query the log for garbd
