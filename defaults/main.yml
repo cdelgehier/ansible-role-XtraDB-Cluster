@@ -56,7 +56,7 @@ xtradb_sst_password: sstpassword
 # Defines the cluster name
 xtradb_cluster_name: foo
 
-# Defines the swappiness by node
+# Defines the swappiness by node (< 0 will skip this setting, otherwise 0-100)
 xtradb_swappiness: 0
 
 # Defines users to create

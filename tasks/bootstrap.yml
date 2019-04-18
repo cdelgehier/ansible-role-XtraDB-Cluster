@@ -17,8 +17,9 @@
     name: vm.swappiness
     value: "{{ xtradb_swappiness }}"
     state: present
-  when:
-    - docker is not defined
+  when: >
+    docker is not defined and
+    xtradb_swappiness >= 0
 
 - name: Start the master node
   service:
