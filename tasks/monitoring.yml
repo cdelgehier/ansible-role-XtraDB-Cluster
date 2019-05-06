@@ -5,7 +5,7 @@
     dest: /usr/bin/
     owner: root
     group: root
-    mode: 0744
+    mode: 0755
     
 - name: Install xinetd for cluster stats check
   package:
