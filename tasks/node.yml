@@ -40,6 +40,11 @@
   when:
     - not _xtradb_secured.stat.exists
 
+- name: include monitoring tasks
+  import_tasks: monitoring.yml
+  when:
+    - xtradb_monitoring
+
 - name: include secure tasks
   import_tasks: secure_install.yml
   when:
