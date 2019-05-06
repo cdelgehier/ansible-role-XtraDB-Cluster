@@ -1,0 +1,33 @@
+---
+- name: Copy clustercheck script
+  copy:
+    src: ../files/clustercheck
+    dest: /usr/bin/
+    owner: root
+    group: root
+    mode: 0755
+    
+- name: Install xinetd for cluster stats check
+  package:
+    name: xinetd
+    state: present
+
+- name: Configure mysqlchk as a service
+  lineinfile:
+    path: /etc/services
+    regexp: '^mysqlchk'
+    line: mysqlchk 9200/tcp
+
+- name: Copying mysqlchk conf file
+  template:
+    src: ../templates/mysqlchk.j2
+    dest: /etc/xinetd.d/mysqlchk
+    owner: root
+    group: root
+    mode: 0644
+  
+- name: Start and reload xinetd for cluster stats check
+  service:
+    name: xinetd
+    state: reloaded
+    enabled: yes
