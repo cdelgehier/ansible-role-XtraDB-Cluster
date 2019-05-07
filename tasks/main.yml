@@ -35,9 +35,10 @@
 - name: Install packages
   package:
     name: "{{ item }}"
-    state: installed
+    state: present
   with_items: "{{ xtradb_packages }}"
   tags: install
+
 
 - name: Ensure service is started
   service:
