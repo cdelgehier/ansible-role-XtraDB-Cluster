@@ -30,6 +30,7 @@
     name: ""
     host_all: yes
     state: absent
+    login_unix_socket: /var/run/mysqld/mysqld.sock
 
 - name: "Secure the MySQL root user for localhost"
   mysql_user:
@@ -37,6 +38,7 @@
     login_password: "{{ xtradb_root_password }}"
     name: "{{ xtradb_root_user }}"
     host: "{{ item }}"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
   with_items:
     - "::1"
     - "127.0.0.1"
@@ -50,6 +52,7 @@
     login_user: "{{ xtradb_root_user }}"
     login_password: "{{ xtradb_root_password }}"
     state: absent
+    login_unix_socket: /var/run/mysqld/mysqld.sock
 
 
 - name: Marking as secured
