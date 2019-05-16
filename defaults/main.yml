@@ -47,6 +47,9 @@ xtradb_bind_interface: eth0
 # Defines the network address used
 xtradb_bind_address: "{{ hostvars[inventory_hostname]['ansible_' + xtradb_bind_interface]['ipv4']['address'] }}"
 
+# Defines the SST method
+xtradb_sst_method: rsync
+
 # Defines the sst user
 xtradb_sst_user: sstuser
 
