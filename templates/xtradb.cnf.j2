@@ -99,7 +99,7 @@ binlog_ignore_db = {{ db.name }}
 wsrep_provider={{ xtradb_wsrep_provider }}
 
 # Node address
-wsrep_node_address={{ xtradb_bind_address }}
+wsrep_node_address={{ xtradb_node_address | default(xtradb_bind_address) }}
 
 # Node name
 wsrep_node_name={{ ansible_hostname }}
