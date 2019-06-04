@@ -6,13 +6,7 @@
   when: ansible_selinux.status == 'enabled'
 
 - name: repository installation
-  yum_repository:
-    file: "{{ xtradb_repo_filename }}" 
-    name: "{{ xtradb_repo_name }}"
-    description: "{{ xtradb_repo_desc }}"
-    baseurl: "{{ xtradb_repo_baseurl }}"
-    gpgkey: "{{ xtradb_repo_gpgkey }}"
-    gpgcheck: "{{ xtradb_repo_gpgcheck }}"
-
-
+  yum:
+    name: "https://repo.percona.com/yum/percona-release-latest.noarch.rpm"
+    state: present
 ...
