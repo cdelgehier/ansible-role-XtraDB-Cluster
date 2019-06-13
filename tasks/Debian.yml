@@ -3,8 +3,10 @@
 - name: add apt key
   apt_key:
     keyserver: keyserver.ubuntu.com
-    id: "{{ item }}"
+    id: "{{ gpgkeyid }}"
   with_items: "{{ xtradb_repo_gpgkey }}"
+  loop_control:
+    loop_var: gpgkeyid
 
 - name: repository installation
   apt_repository:
