@@ -39,6 +39,14 @@
   with_items: "{{ xtradb_packages }}"
   tags: install
 
+- name: Generate host configuration
+  template:
+    src:  host.cnf.j2
+    dest: "{{ xtradb_host_config_file }}"
+    owner: root
+    group: root
+    mode: 0644
+
 - name: Ensure service is started
   service:
     name: "{{ xtradb_service }}"

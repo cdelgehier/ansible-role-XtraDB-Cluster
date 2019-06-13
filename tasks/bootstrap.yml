@@ -4,7 +4,7 @@
     name: "{{ xtradb_service }}"
     state: stopped
 
-- name: Generate configuration
+- name: Generate cluster configuration
   template:
     src:  xtradb.cnf.j2
     dest: "{{ xtradb_config_file }}"

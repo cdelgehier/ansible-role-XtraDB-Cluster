@@ -10,6 +10,7 @@ xtradb_repo_gpgkey: 8507EFA5
 xtradb_wsrep_provider: /usr/lib/libgalera_smm.so
 xtradb_confdir: /etc/mysql/percona-xtradb-cluster.conf.d
 xtradb_config_file: "{{ xtradb_confdir }}/wsrep.cnf"
+xtradb_host_config_file: "{{ xtradb_confdir }}/zz-host.cnf"
 xtradb_packages:
   #- "percona-server-server-{{ xtradb_version }}"
   - "percona-xtradb-cluster-{{ xtradb_version }}"
