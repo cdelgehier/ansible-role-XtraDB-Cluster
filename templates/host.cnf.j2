@@ -73,3 +73,9 @@ skip_name_resolve={{ xtradb_skip_name_resolve }}{% endif %}
 
 {% if xtradb_innodb_autoinc_lock_mode %}# This InnoDB autoincrement locking mode is a requirement for Galera
 innodb_autoinc_lock_mode={{ xtradb_innodb_autoinc_lock_mode }}{% endif %}
+
+{% if xtradb_mysql_host_vars is defined %}
+{% for var, val in xtradb_mysql_host_vars.iteritems() %}
+{{ var }}={{ val }}
+{% endfor %}
+{% endif %}
