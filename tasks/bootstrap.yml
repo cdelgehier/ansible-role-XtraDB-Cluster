@@ -11,6 +11,12 @@
     owner: root
     group: root
     mode: 0644
+  when: groups[xtradb_nodes_group] is defined and groups[xtradb_nodes_group] | length > 1
+- name: Remove cluster configuration
+  file:
+    dest: "{{ xtradb_config_file }}"
+    state: absent
+  when: groups[xtradb_nodes_group] is not defined or groups[xtradb_nodes_group] | length == 1
 
 - name: Configure swappiness
   sysctl:
