@@ -3,11 +3,12 @@
 - name: add apt key
   apt_key:
     keyserver: keyserver.ubuntu.com
-    id: "{{ xtradb_repo_gpgkey }}"
+    id: "{{ item }}"
+  with_items: "{{ xtradb_repo_gpgkey }}"
 
 - name: repository installation
   apt_repository:
-    filename: "{{ xtradb_repo_filename }}" 
+    filename: "{{ xtradb_repo_filename }}"
     repo: "{{ xtradb_repo_baseurl }}"
     #update_cache: yes
 
@@ -15,4 +16,3 @@
   apt:
     update_cache: yes
   changed_when: false
-...

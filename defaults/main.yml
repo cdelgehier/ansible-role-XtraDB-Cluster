@@ -96,5 +96,3 @@ xtradb_table_definition_cache: ""
 xtradb_table_open_cache: ""
 xtradb_table_open_cache_instances: ""
 xtradb_tmp_table_size: ""
-
-...

@@ -4,16 +4,11 @@
   register: "_xtradb_root_temp_password"
   when:
     - not _xtradb_password_changed.stat.exists
-#  args:
-#    creates: "{{ xtradb_password_changed }}"
-
 
 - name: Set the MySQL root password
-  shell: 'mysqladmin -u root --password="{{ _xtradb_root_temp_password.stdout }}" password "{{ xtradb_root_password }}"'
+  shell: "echo \"ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ xtradb_root_password }}'; FLUSH PRIVILEGES;\" | mysql -u root --password='{{ _xtradb_root_temp_password.stdout }}' --connect-expired-password"
   when:
     - not _xtradb_password_changed.stat.exists
-#  args:
-#    creates: "{{ xtradb_password_changed }}"
 
 - name: Marking as password is changed
   file:
@@ -25,10 +20,11 @@
 
 - name: Delete anonymous connections
   mysql_user:
+    name: ''
+    host_all: yes
     login_user: "{{ xtradb_root_user }}"
     login_password: "{{ xtradb_root_password }}"
-    name: ""
-    host_all: yes
+    login_unix_socket: /var/run/mysqld/mysqld.sock
     state: absent
 
 - name: "Secure the MySQL root user for localhost"
@@ -37,6 +33,7 @@
     login_password: "{{ xtradb_root_password }}"
     name: "{{ xtradb_root_user }}"
     host: "{{ item }}"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
   with_items:
     - "::1"
     - "127.0.0.1"
@@ -49,8 +46,8 @@
     db: test
     login_user: "{{ xtradb_root_user }}"
     login_password: "{{ xtradb_root_password }}"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
     state: absent
-
 
 - name: Marking as secured
   file:
@@ -60,4 +57,3 @@
     group: root
     mode: '0400'
 
-...

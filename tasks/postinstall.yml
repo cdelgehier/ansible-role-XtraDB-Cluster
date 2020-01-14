@@ -4,6 +4,7 @@
     name: "{{ item.name }}"
     login_user: "{{ xtradb_root_user }}"
     login_password: "{{ xtradb_root_password }}"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
     state: present
   with_items: "{{ xtradb_databases }}"
   register: _db
@@ -25,6 +26,7 @@
     target: "/tmp/{{ item.item.init_script | basename }}"
     login_user: "{{ xtradb_root_user }}"
     login_password: "{{ xtradb_root_password }}"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
   with_items: "{{ _db.results }}"
   when:
     - item.changed
@@ -48,6 +50,6 @@
     append_privs: "{{ item.append_privs|default('no') }}"
     login_user: root
     login_password: "{{ xtradb_root_password }}"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
     state: present
   with_items: "{{ xtradb_users }}"
-...
