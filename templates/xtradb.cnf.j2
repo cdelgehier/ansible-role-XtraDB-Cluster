@@ -105,7 +105,7 @@ wsrep_cluster_address={{ xtradb_wsrep_cluster_address }}
 wsrep_sst_method=xtrabackup-v2
 
 # Authentication for SST method
-wsrep_sst_auth={{ xtradb_sst_user }}:{{ xtradb_sst_password }}
+wsrep_sst_auth='{{ xtradb_sst_user }}:{{ xtradb_sst_password }}'
 
 
 {% if xtradb_pxc_strict_mode %}# pxc_strict_mode allowed values: DISABLED,PERMISSIVE,ENFORCING,MASTER
