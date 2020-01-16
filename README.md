@@ -1,4 +1,3 @@
-[![Build Status](https://travis-ci.org/cdelgehier/ansible-role-XtraDB-Cluster.svg?branch=master)](https://travis-ci.org/cdelgehier/ansible-role-XtraDB-Cluster)
 # Ansible role `ansible-role-XtraDB-Cluster`
 
 An Ansible role for setup a percon XtraDB Cluster. Specifically, the responsibilities of this role are to:
@@ -12,6 +11,23 @@ An Ansible role for setup a percon XtraDB Cluster. Specifically, the responsibil
 No specific requirements
 
 ## Role Variables
+
+### REQUIRED
+These are the minimum variables needed to create a cluster with a user and database
+
+| Variable  |
+| :--- |
+| xtradb_cluster_name |
+| xtradb_sst_user |
+| xtradb_sst_password |
+| xtradb_root_password |
+| xtradb_nodes_group |
+| xtradb_bind_interface |
+| xtradb_bind_address |
+| xtradb_wsrep_cluster_address |
+| xtradb_master_node |
+| xtradb_databases |
+| xtradb_users |
 
 ### BASICS
 | Variable   | Default | Comments (type)  |
@@ -205,9 +221,9 @@ node3 ansible_host=192.168.1.154
 
 ## Testing
 
-There are two types of test environments available. One powered by Vagrant, another by Docker. The latter is suitable for running automated tests on Travis-CI. Test code is kept in separate orphan branches. For details of how to set up these test environments on your own machine, see the README files in the respective branches:
+Using the `molecule` and `docker` python modules, you can test by running `molecule test` from the root of the project.
 
-- Docker: [docker-tests](https://github.com/cdelgehier/ansible-role-XtraDB-Cluster/tree/docker-tests)
+This will create a 3 node CentOS 7 docker container cluster
 
 ## Remove
 
