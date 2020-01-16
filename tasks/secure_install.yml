@@ -8,10 +8,18 @@
 #    creates: "{{ xtradb_password_changed }}"
 
 
-- name: Set the MySQL root password
-  shell: 'mysqladmin -u root --password="{{ _xtradb_root_temp_password.stdout }}" password "{{ xtradb_root_password }}"'
-  when:
-    - not _xtradb_password_changed.stat.exists
+- name: Percona | Change Percona Root Pass
+  shell:
+      cmd: |
+          mysql -u root -p"{{ _xtradb_root_temp_password.stdout }}" --connect-expired-password << EOF
+          ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ xtradb_root_password }}';
+          EOF
+
+#- name: Set the MySQL root password
+#  shell: 'mysqladmin -u root --password="{{ _xtradb_root_temp_password.stdout }}" password "{{ xtradb_root_password }}"'
+#  when:
+#    - not _xtradb_password_changed.stat.exists
+## PREVIOUSLY COMMENTED
 #  args:
 #    creates: "{{ xtradb_password_changed }}"
 

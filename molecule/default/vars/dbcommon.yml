@@ -1,0 +1,18 @@
+xtradb_cluster_name: "morpheus"
+xtradb_sst_user: sstuser
+xtradb_sst_password: s3cr3t
+xtradb_root_password: evenmores3cr3t
+
+xtradb_nodes_group: "db"
+xtradb_bind_interface: eth0
+
+xtradb_bind_address: "{{ ansible_default_ipv4.address }}"
+xtradb_wsrep_cluster_address: "gcomm://{{ groups['db'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | join(',') }}"
+xtradb_master_node: "{{ hostvars[ groups['db'][0] ].ansible_default_ipv4.address }}"
+
+xtradb_databases:
+    - name: morpheusdb
+xtradb_users:
+    - name: morpheus
+      password: Pa55w0rd!
+      priv: 'keystone.*:GRANT,ALL'

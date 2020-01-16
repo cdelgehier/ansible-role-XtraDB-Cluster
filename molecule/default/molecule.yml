@@ -1,0 +1,50 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint:
+  name: yamllint
+  enabled: False
+  options:
+    config-data:
+      ignore: venv
+platforms:
+  - name: instance1
+    image: centos:7
+    groups:
+      - db
+    command: /sbin/init
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  - name: instance2
+    image: centos:7
+    groups:
+      - db
+    command: /sbin/init
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  - name: instance3
+    image: centos:7
+    groups:
+      - db
+    command: /sbin/init
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+provisioner:
+  name: ansible
+#  lint:
+#    name: ansible-lint
+verifier:
+  name: testinfra
+  lint:
+    name: flake8

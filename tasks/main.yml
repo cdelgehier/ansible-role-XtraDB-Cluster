@@ -48,6 +48,8 @@
   when:
     - not _xtradb_secured.stat.exists
 
+- debug:
+    var: _xtradb_secured
 
 - name: include secure tasks
   import_tasks: secure_install.yml
@@ -55,6 +57,8 @@
   when:
     - not _xtradb_secured.stat.exists
 
+- debug:
+    var: _xtradb_configured
 
 - name: include bootstrap tasks
   import_tasks: bootstrap.yml

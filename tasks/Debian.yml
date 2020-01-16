@@ -7,7 +7,7 @@
 
 - name: repository installation
   apt_repository:
-    filename: "{{ xtradb_repo_filename }}" 
+    filename: "{{ xtradb_repo_filename }}"
     repo: "{{ xtradb_repo_baseurl }}"
     #update_cache: yes
 

@@ -3,6 +3,7 @@
 # Distribution-specific variables for RHEL, CentOS, ...
 ---
 
+xtradb_repo_rpm: https://repo.percona.com/yum/percona-release-latest.noarch.rpm
 xtradb_repo_filename: "percona"
 xtradb_repo_name: "percona-release-$basearch"
 xtradb_repo_desc: "Percona-Release YUM repository - $basearch"
