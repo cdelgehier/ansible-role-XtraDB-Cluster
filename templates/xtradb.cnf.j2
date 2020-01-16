@@ -98,6 +98,9 @@ wsrep_cluster_name={{ xtradb_cluster_name }}
 # Cluster connection URL contains the IPs of node#1, node#2 and node#3
 wsrep_cluster_address={{ xtradb_wsrep_cluster_address }}
 
+# Sync Wait
+{% if xtradb_wsrep_sync_wait %}wsrep_sync_wait={{ xtradb_wsrep_sync_wait }}{% endif %}
+
 # SST method
 wsrep_sst_method=xtrabackup-v2
 
