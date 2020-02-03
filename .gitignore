@@ -22,3 +22,4 @@ venv
 .idea
 tests
 molecule
+.vscode

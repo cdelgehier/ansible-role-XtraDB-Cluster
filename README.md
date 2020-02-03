@@ -13,6 +13,7 @@ No specific requirements
 ## Role Variables
 
 ### REQUIRED
+
 These are the minimum variables needed to create a cluster with a user and database
 
 | Variable  |
@@ -30,6 +31,7 @@ These are the minimum variables needed to create a cluster with a user and datab
 | xtradb_users |
 
 ### BASICS
+
 | Variable   | Default | Comments (type)  |
 | :---       | :---    | :---             |
 | `xtradb_bind_address` | - | The listening IP |
@@ -65,7 +67,7 @@ For more info on the values, read the [MariaDB Server System Variables documenta
 | `xtradb_innodb_buffer_pool_instances` | ` ` | To enable multiple buffer pool instances, set the innodb_buffer_pool_instances configuration option to a value greater than 1 (8 is the default) up to 64 (the maximum). This option takes effect only when you set innodb_buffer_pool_size to a size of 1GB or more. The total size you specify is divided among all the buffer pools |
 | `xtradb_innodb_buffer_pool_size` | ` ` | A good value is 70%-80% of available memory. |
 | `xtradb_innodb_file_format` | ` ` |  |
-| `xtradb_innodb_file_format_check` | ` ` |  |
+| `xtradb_innodb_file_format_check` | `` |  |
 | `xtradb_innodb_file_per_table` | ` ` |  |
 | `xtradb_innodb_flush_log_at_trx_commit` | ` ` | When innodb_flush_log_at_trx_commit is set to 1 the log buffer is flushed on every transaction commit to the log file on disk and provides maximum data integrity but it also has performance impact. Setting it to 2 means log buffer is flushed to OS file cache on every transaction commit. The implication of 2 is optimal and improve performance if you are not concerning ACID and can lose transactions for last second or two in case of OS crashes.  |
 | `xtradb_innodb_log_buffer_size` | ` ` | Innodb writes changed data record into lt’s log buffer, which kept in memory and it saves disk I/O for large transactions as it not need to write the log of changes to disk before transaction commit. 4 MB – 8 MB is good start unless you write a lot of huge blobs |
@@ -232,6 +234,7 @@ To remove alltraces and start a new install
 ```
 ansible  db -m shell -a 'rm -rf /var/lib/mysql /var/log/mysqld.log /etc/percona-xtradb-cluster.conf.d ; yum remove Percona* -y'
 ```
+
 ## Contributing
 
 Issues, feature requests, ideas are appreciated and can be posted in the Issues section.
@@ -244,4 +247,5 @@ Pull requests are also very welcome. The best way to submit a PR is by first cre
 
 ## Contributors
 
-- [Cedric DELGEHIER](https://github.com/cdelgehier/) (maintainer)
+- [Cedric DELGEHIER](https://github.com/cdelgehier/) (original maintainer)
+- [Nick Celebic](https://github.com/ncelebic/) (maintainer)
