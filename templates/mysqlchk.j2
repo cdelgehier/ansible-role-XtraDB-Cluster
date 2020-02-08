@@ -19,7 +19,7 @@ service mysqlchk
         # Recommended: server_args   = user pass 1 /var/log/log-file 0 /etc/my.cnf.local"
         # Compatibility: server_args = user pass 1 /var/log/log-file 1 /etc/my.cnf.local"
         # 55-to-56 upgrade: server_args = user pass 1 /var/log/log-file 0 /etc/my.cnf.extra"
-        server_args = clustercheckuser {{ lookup('env', 'XTRADB_CLUSTERCHECK_PASSWORD') }}
+        server_args = clustercheckuser {{ lookup('env', 'XTRADB_CLUSTERCHECK_PASSWORD') }} available_when_donor=1
         #
         # recommended to put the IPs that need
         # to connect exclusively (security purposes)
