@@ -50,4 +50,5 @@
     login_password: "{{ xtradb_root_password }}"
     state: present
   with_items: "{{ xtradb_users }}"
+  no_log: true
 ...
