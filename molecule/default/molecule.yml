@@ -42,8 +42,9 @@ platforms:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
 provisioner:
   name: ansible
-#  lint:
-#    name: ansible-lint
+  lint:
+    name: ansible-lint
+    enabled: false
 verifier:
   name: testinfra
   lint:

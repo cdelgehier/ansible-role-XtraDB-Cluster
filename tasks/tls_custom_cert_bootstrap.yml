@@ -1,0 +1,80 @@
+---
+- name: Install openssl
+  package:
+    name: openssl
+    state: present
+
+- name: "Stopping {{ xtradb_service }}"
+  service:
+    name: "{{ xtradb_service }}"
+    state: stopped
+
+- name: Generate configuration
+  template:
+    src:  xtradb.cnf.j2
+    dest: "{{ xtradb_config_file }}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Configure swappiness
+  sysctl:
+    name: vm.swappiness
+    value: "{{ xtradb_swappiness }}"
+    state: present
+  when:
+    - docker is not defined
+
+- name: Copy certificates to all nodes
+  copy:
+    src: "{{ item }}"
+    dest: "/var/lib/mysql/{{ item }}"
+    mode: 0600
+    owner: mysql
+    group: mysql
+  loop:
+    - "ca.pem"
+    - "server-cert.pem"
+    - "server-key.pem"
+
+- name: Start the master node
+  service:
+    name: "{{ xtradb_service }}@bootstrap.service"
+    state: started
+  when:
+    - xtradb_bind_address == xtradb_master_node
+    - ansible_os_family == "RedHat"
+
+- name: Start the master node
+  command: /etc/init.d/mysql bootstrap-pxc
+  when:
+    - xtradb_bind_address == xtradb_master_node
+    - ansible_os_family == "Debian"
+
+- name: Create SST user
+  mysql_user:
+    login_user: "{{ xtradb_root_user }}"
+    login_password: "{{ xtradb_root_password }}"
+    user: "{{ xtradb_sst_user }}"
+    password: "{{ xtradb_sst_password }}"
+    priv: "*.*:grant,reload,lock tables,process,replication client"
+  when:
+    - xtradb_bind_address == xtradb_master_node
+
+- name: Start the slave nodes
+  service:
+    name: "{{ xtradb_service }}"
+    state: started
+  when:
+    - xtradb_bind_address != xtradb_master_node
+
+- name: Marking as configured
+  file:
+    path: "{{ xtradb_configured }}"
+    state: "touch"
+    owner: root
+    group: root
+    mode: '0400'
+
+
+...

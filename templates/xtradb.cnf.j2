@@ -7,6 +7,7 @@
 user={{ xtradb_mysql_user }}
 datadir={{ xtradb_datadir }}
 
+{% if xtradb_ssl_client_only %}require_secure_transport={{ xtradb_ssl_client_only }}{% endif %}
 
 {% if xtradb_log_warnings %}log_warnings={{ xtradb_log_warnings }}{% endif %}
 
@@ -107,7 +108,8 @@ wsrep_sst_method=xtrabackup-v2
 # Authentication for SST method
 wsrep_sst_auth='{{ xtradb_sst_user }}:{{ xtradb_sst_password }}'
 
-
 {% if xtradb_pxc_strict_mode %}# pxc_strict_mode allowed values: DISABLED,PERMISSIVE,ENFORCING,MASTER
 # Set ENFORCING to block the use of experimental and unsupported features in Percona XtraDB Cluster
 pxc_strict_mode={{ xtradb_pxc_strict_mode }}{% endif %}
+
+{% if xtradb_tls_enabled %}pxc_encrypt_cluster_traffic=ON{% endif %}

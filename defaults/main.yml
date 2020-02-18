@@ -53,6 +53,15 @@ xtradb_sst_password: sstpassword
 # Defines the cluster name
 xtradb_cluster_name: foo
 
+# Boolean for cluster TLS mode
+xtradb_tls_enabled: false
+
+# Boolean for self-signed certificates
+xtradb_tls_self_signed: false
+
+# Boolean for self-signed certificates
+xtradb_tls_custom_cert: false
+
 # Defines the swappiness by node
 xtradb_swappiness: 0
 
@@ -62,7 +71,7 @@ xtradb_users: []
 # Defines databases to create
 xtradb_databases: []
 
-
+xtradb_wsrep_sync_wait: 2
 xtradb_binlog_format: "ROW"
 xtradb_character_set_server: "utf8"
 xtradb_collation_server: "utf8_general_ci"

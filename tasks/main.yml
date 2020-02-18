@@ -64,7 +64,24 @@
   import_tasks: bootstrap.yml
   tags: configure
   when:
-    - not _xtradb_configured.stat.exists
+    - (not _xtradb_configured.stat.exists) and
+      (not xtradb_tls_enabled)
+
+- name: include TLS self-signed bootstrap tasks
+  import_tasks: tls_self_signed_bootstrap.yml
+  tags: configure
+  when:
+    - (not _xtradb_configured.stat.exists) and
+      (xtradb_tls_enabled) and
+      (xtradb_tls_self_signed)
+
+- name: include TLS custom certificate bootstrap tasks
+  import_tasks: tls_custom_cert_bootstrap.yml
+  tags: configure
+  when:
+    - (not _xtradb_configured.stat.exists) and
+      (xtradb_tls_enabled) and
+      (xtradb_tls_custom_cert)
 
 - name: include postinstall tasks
   import_tasks: postinstall.yml

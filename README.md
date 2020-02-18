@@ -50,6 +50,7 @@ These are the minimum variables needed to create a cluster with a user and datab
 | `xtradb_databases`     | []          | List of names of the databases to be added                                                                  |
 | `xtradb_users`         | []          | List of dicts specifying the users to be added. See below for details.                                      |
 | `xtradb_version` | `57` | Package version of XtraDB |
+| `xtradb_ssl_client_only` | `false` | Disallow non-SSL client connections |
 
 ### MySQL part
 For more info on the values, read the [MariaDB Server System Variables documentation](https://mariadb.com/kb/en/mariadb/server-system-variables/).
@@ -244,4 +245,5 @@ Pull requests are also very welcome. The best way to submit a PR is by first cre
 
 ## Contributors
 
-- [Cedric DELGEHIER](https://github.com/cdelgehier/) (maintainer)
+- [Cedric DELGEHIER](https://github.com/cdelgehier/) (author, maintainer)
+- [Nick Celebic](https://github.com/tryfan/) (fork contributor)
