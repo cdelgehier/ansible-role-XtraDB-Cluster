@@ -62,6 +62,9 @@ xtradb_tls_self_signed: false
 # Boolean for self-signed certificates
 xtradb_tls_custom_cert: false
 
+# Disallow non-SSL clients
+xtradb_ssl_client_only: false
+
 # Defines the swappiness by node
 xtradb_swappiness: 0
 
