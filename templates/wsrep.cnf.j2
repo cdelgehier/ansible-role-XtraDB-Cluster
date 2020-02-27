@@ -7,6 +7,7 @@ wsrep_provider={{ xtradb_wsrep_provider }}
 
 # In order for Galera to work correctly binlog format should be ROW
 binlog_format={{xtradb_binlog_format}}
+binlog_row_image={{xtradb_row_image}}
 
 {% if xtradb_wsrep_provider_options %}wsrep_provider_options="{{ xtradb_wsrep_provider_options | join(';') }}"{% endif %}
 

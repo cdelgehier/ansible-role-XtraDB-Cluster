@@ -66,6 +66,7 @@ xtradb_databases: []
 xtradb_pxc_strict_mode: "ENFORCING"
 # In order for Galera to work correctly binlog format should be ROW
 xtradb_binlog_format: "ROW"
+xtradb_row_image: "minimal"
 xtradb_wsrep_provider_options: []
 xtradb_wsrep_slave_threads: ""
 
