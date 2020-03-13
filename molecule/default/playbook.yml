@@ -4,12 +4,12 @@
   pre_tasks:
     - name: vars
       include_vars: vars/dbcommon.yml
-    - name: vars
-      include_vars: vars/dbcreate.yml
-    - name: vars
-      include_vars: vars/dbsecure.yml
-    - name: vars
-      include_vars: vars/dbbootstrap.yml
+#    - name: vars
+#      include_vars: vars/dbcreate.yml
+#    - name: vars
+#      include_vars: vars/dbsecure.yml
+#    - name: vars
+#      include_vars: vars/dbbootstrap.yml
   vars:
     docker: true
   roles:
