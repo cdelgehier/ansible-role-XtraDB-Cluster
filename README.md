@@ -79,14 +79,17 @@ For more info on the values, read the [MariaDB Server System Variables documenta
 
 ### Adding databases
 
-Databases are defined with a dict containing the fields `name:` (required), and `init_script:` (optional).
-The init script is a SQL file that is executed when the database is created to initialise tables and populate it with values.
+Databases are defined with a dict containing the fields `name:` (required), `init_files:` (optional list) and `init_templates:` (optional list).
+The init file/template is a SQL file that is executed when the database is created to initialise tables and populate it with values.
 
 ```yaml
 xtradb_databases:
   - name: keystone
   - name: mydb
-    init_script: files/init_mydb.sql
+    init_files: 
+      - files/init_mydb.sql
+    init_templates:
+      - templates/init_mydb.sql.j2
 ```
 
 ### Adding users

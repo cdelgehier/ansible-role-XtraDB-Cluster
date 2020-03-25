@@ -8,36 +8,67 @@
   with_items: "{{ xtradb_databases }}"
   register: _db
 
-- name: Copy database init scripts
-  template:
-    src: "{{ item.item.init_script }}"
-    dest: "/tmp/{{ item.item.init_script | basename }}"
+- name: Copy database init files
+  copy:
+    src: "{{ item.1 }}"
+    dest: "/tmp/{{ item.1 | basename }}"
     mode: "0600"
-  with_items: "{{ _db.results }}"
+  loop: "{{ _db.results | subelements('item.init_files') }}"
   when:
-    - item.changed
-    - item.item.init_script is defined
+    - item.0.changed
+    - item.1 is defined
 
-- name: Initialise databases
+- name: Copy database init templates
+  template:
+    src: "{{ item.1 }}"
+    dest: "/tmp/{{ item.1 | basename }}"
+    mode: "0600"
+  loop: "{{ _db.results | subelements('item.init_templates') }}"
+  when:
+    - item.0.changed
+    - item.1 is defined
+
+- name: Initialise databases files
   mysql_db:
-    name: "{{ item.item.name }}"
+    name: "{{ item.0.item.name }}"
     state: import
-    target: "/tmp/{{ item.item.init_script | basename }}"
+    target: "/tmp/{{ item.1 | basename }}"
     login_user: "{{ xtradb_root_user }}"
     login_password: "{{ xtradb_root_password }}"
-  with_items: "{{ _db.results }}"
+  loop: "{{ _db.results | subelements('item.init_files') }}"
   when:
-    - item.changed
-    - item.item.init_script is defined
+    - item.0.changed
+    - item.1 is defined
 
-- name: Delete init scripts from the server
-  file:
-    name: "/tmp/{{ item.item.init_script | basename }}"
-    state: absent
-  with_items: "{{ _db.results }}"
+- name: Initialise databases templates
+  mysql_db:
+    name: "{{ item.0.item.name }}"
+    state: import
+    target: "/tmp/{{ item.1 | basename }}"
+    login_user: "{{ xtradb_root_user }}"
+    login_password: "{{ xtradb_root_password }}"
+  loop: "{{ _db.results | subelements('item.init_templates') }}"
   when:
-    - item.changed
-    - item.item.init_script is defined
+    - item.0.changed
+    - item.1 is defined
+
+- name: Delete init files from the server
+  file:
+    name: "/tmp/{{ item.1 | basename }}"
+    state: absent
+  loop: "{{ _db.results | subelements('item.init_files') }}"
+  when:
+    - item.0.changed
+    - item.1 is defined
+
+- name: Delete init templates from the server
+  file:
+    name: "/tmp/{{ item.1 | basename }}"
+    state: absent
+  loop: "{{ _db.results | subelements('item.init_templates') }}"
+  when:
+    - item.0.changed
+    - item.1 is defined
 
 - name: Create the users
   mysql_user:
