@@ -59,8 +59,13 @@ xtradb_tls_enabled: false
 # Boolean for self-signed certificates
 xtradb_tls_self_signed: false
 
-# Boolean for self-signed certificates
+# Boolean for custom certificates
 xtradb_tls_custom_cert: false
+
+# Defines filenames for certificate files
+xtradb_tls_ca_filename: ""
+xtradb_tls_cert_filename: ""
+xtradb_tls_key_filename: ""
 
 # Disallow non-SSL clients
 xtradb_ssl_client_only: false

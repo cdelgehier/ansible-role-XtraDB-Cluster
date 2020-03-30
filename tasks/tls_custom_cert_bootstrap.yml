@@ -33,9 +33,9 @@
     owner: mysql
     group: mysql
   loop:
-    - "ca.pem"
-    - "server-cert.pem"
-    - "server-key.pem"
+    - "{{ xtradb_tls_ca_filename }}"
+    - "{{ xtradb_tls_cert_filename }}"
+    - "{{ xtradb_tls_key_filename }}"
 
 - name: Start the master node
   service:
