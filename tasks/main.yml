@@ -32,6 +32,11 @@
     - "{{ ansible_os_family }}.yml"
   tags: install
 
+- name: "Activate repository via percona-release tools"
+  command: percona-release enable-only original
+  register: "_xtradb_activation"
+  tags: activation
+
 - name: Install packages
   package:
     name: "{{ item }}"
