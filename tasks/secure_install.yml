@@ -9,7 +9,7 @@
 
 
 - name: Set the MySQL root password
-  shell: 'mysqladmin -u root --password="{{ _xtradb_root_temp_password.stdout }}" password "{{ xtradb_root_password }}"'
+  shell: "echo \"ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ xtradb_root_password }}'; FLUSH PRIVILEGES;\" | mysql -u root --password='{{ _xtradb_root_temp_password.stdout }}' --connect-expired-password"
   when:
     - not _xtradb_password_changed.stat.exists
 #  args:
