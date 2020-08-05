@@ -31,3 +31,27 @@
     name: xinetd
     state: reloaded
     enabled: yes
+
+- name: MySQL Exporter | Download Binary
+  get_url:
+    url: "https://github.com/prometheus/mysqld_exporter/releases/download/v0.12.1/mysqld_exporter-0.12.1.linux-amd64.tar.gz"
+    dest: "/tmp/mysqld_exporter-0.12.1.linux-amd64.tar.gz"
+
+- name: MySQL Exporter | Extract Binary
+  unarchive:
+    src: "/tmp/mysqld_exporter-0.12.1.linux-amd64.tar.gz"
+    dest: /usr/local/bin/
+    remote_src: true
+
+- name: MySQL Exporter  | Systemd Service
+  template:
+    src: mysqld_exporter.service.j2
+    dest: /etc/systemd/system/mysqld_exporter.service
+  
+- name: MySQL Exporter | Start Service
+  systemd:
+    daemon_reload: true
+    name: mysqld_exporter
+    enabled: true
+    state: started
+  tags: mysqld_exporter

@@ -129,3 +129,6 @@ xtradb_default_storage_engine: "InnoDB"
 xtradb_event_scheduler: ""
 
 xtradb_monitoring: true
+
+## Monitoring 
+mysql_exporter_conf_dir: /etc/mysqld_exporter/

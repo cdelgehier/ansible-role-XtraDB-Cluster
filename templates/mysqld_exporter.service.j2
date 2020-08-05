@@ -1,0 +1,13 @@
+[Unit]
+Description=MySQLd Exporter
+
+[Service]
+Type=simple
+Restart=always
+StandardError=syslog
+StandardOutput=syslog
+SyslogIdentifier=mysqld_exporter
+ExecStart=/usr/local/bin/mysqld_exporter/mysqld_exporter --config.my-cnf /usr/local/bin/mysqld_exporter/mysqld_exporter.cnf --collect.global_status --collect.global_variables --collect.slave_status --collect.info_schema.innodb_cmp --collect.info_schema.innodb_cmpmem --collect.info_schema.query_response_time --collect.auto_increment.columns --collect.binlog_size --collect.engine_innodb_status --collect.perf_schema.replication_group_member_stats --web.listen-address=0.0.0.0:9104
+
+[Install]
+WantedBy=multi-user.target
