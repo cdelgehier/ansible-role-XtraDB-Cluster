@@ -57,8 +57,8 @@ For more info on the values, read the [MariaDB Server System Variables documenta
 | `xtradb_innodb_file_per_table` | `on` | innodb_file_per_table is ON by default from MySQL 5.6. This is usually recommended as it avoids having a huge shared tablespace and as it allows you to reclaim space when you drop or truncate a table. Separate tablespace also benefits for Xtrabackup partial backup scheme |
 | `xtradb_innodb_strict_mode` | `on` |  |
 | `xtradb_join_buffer_size` | ` ` |  |
-| `xtradb_log_warnings` | ` ` |  |
-| `xtradb_log_warnings` | ` ` |  |
+| `xtradb_log_warnings` | `2` | DEPRECATED: whether to produce additional warning/info logs (0-2) |
+| `xtradb_log_error_verbosity` | `3` | whether to produce additional warning/info logs (1-3) |
 | `xtradb_long_query_time` | ` ` |  |
 | `xtradb_max_allowed_packet` | ` ` |  |
 | `xtradb_max_connections` | `4096` |  |
@@ -176,7 +176,7 @@ No dependencies.
       xtradb_innodb_log_file_size: "50M"
       xtradb_innodb_strict_mode: "on"
       xtradb_join_buffer_size: "128K"
-      xtradb_log_warnings: "1"
+      xtradb_log_error_verbosity: 2
       xtradb_long_query_time: "10"
       xtradb_max_allowed_packet: "16M"
       xtradb_max_connections: "505"

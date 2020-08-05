@@ -15,6 +15,8 @@ sql_mode = {{ xtradb_sql_mode }}
 
 {% if xtradb_log_warnings %}log_warnings={{ xtradb_log_warnings }}{% endif %}
 
+{% if xtradb_log_error_verbosity %}log_error_verbosity={{ xtradb_log_error_verbosity }}{% endif %}
+
 {% if xtradb_slow_query_log %}slow_query_log={{ xtradb_slow_query_log }}{% endif %}
 
 {% if xtradb_long_query_time %}long_query_time={{ xtradb_long_query_time }}{% endif %}
