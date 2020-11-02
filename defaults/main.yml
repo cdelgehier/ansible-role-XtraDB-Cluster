@@ -40,7 +40,7 @@ xtradb_version: "57"
 
 # Defines the Debian release of the Percona repository
 # Please check your desired release [here](https://repo.percona.com/apt/)
-xtradb_repo_deb_release: "latest.generic"
+xtradb_repo_deb_release: "latest"
 
 # Defines the Debian distro release of the Percona repository
 # Please check your desired distro release [here](https://repo.percona.com/apt/)
