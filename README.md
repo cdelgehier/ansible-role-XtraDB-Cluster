@@ -34,6 +34,8 @@ No specific requirements
 | `xtradb_databases`     | []          | List of names of the databases to be added                                                                  |
 | `xtradb_users`         | []          | List of dicts specifying the users to be added. See below for details.                                      |
 | `xtradb_version` | `57` | Package version of XtraDB |
+| `xtradb_repo_deb_release` | `latest` | Debian Release of XtraDB (check [releases](https://repo.percona.com/apt/)) |
+| `xtradb_repo_deb_distro` | distribution release (ex: `stretch`, `buster`, etc.) | Debian Distribution Releases of XtraDB (check [releases](https://repo.percona.com/apt/)) |
 
 ### MySQL part
 For more info on the values, read the [MariaDB Server System Variables documentation](https://mariadb.com/kb/en/mariadb/server-system-variables/).

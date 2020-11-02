@@ -3,7 +3,7 @@
 # Distribution-specific variables for Debian, Ubuntu, ...
 ---
 
-xtradb_repo_deb_url: "https://repo.percona.com/apt/percona-release_0.1-6.{{ ansible_distribution_release }}_all.deb"
+xtradb_repo_deb_url: "https://repo.percona.com/apt/percona-release_{{ xtradb_repo_deb_release }}.{{ xtradb_repo_deb_distro }}_all.deb"
 
 xtradb_wsrep_provider: /usr/lib/libgalera_smm.so
 xtradb_confdir: /etc/mysql/percona-xtradb-cluster.conf.d
