@@ -33,7 +33,7 @@ xtradb_wsrep_cluster_address: "gcomm://{{ groups[xtradb_nodes_group] | map('extr
 
 # Defines the which node should be considered the master in the cluster
 # Used to bootstrap cluster
-xtradb_master_node: "{{ hostvars[ groups[xtradb_nodes_group][0] ].ansible_default_ipv4.address }}"
+xtradb_master_node: "{{ hostvars[ groups[xtradb_nodes_group][0] ]['ansible_' ~ xtradb_bind_interface].ipv4.address }}"
 
 # Defines the version
 xtradb_version: "57"
