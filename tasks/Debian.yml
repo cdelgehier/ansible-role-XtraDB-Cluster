@@ -5,10 +5,6 @@
     update_cache: yes
   changed_when: false
 
-- name: PXC | Install python-mysqldb
-  apt:
-    name: python-mysqldb
-
 - name: PXC | Install Percona repo
   apt:
     deb: "{{ xtradb_repo_deb_url }}"
