@@ -12,6 +12,12 @@
     group: root
     mode: 0644
 
+- name: Overwrite MariaDB includedir
+  replace:
+    path: /etc/mysql/my.cnf
+    regexp: '^!includedir /etc/mysql/mariadb.conf.d/$'
+    replace: '!includedir /etc/mysql/percona-xtradb-cluster.conf.d/'
+
 - name: Configure swappiness
   sysctl:
     name: vm.swappiness
