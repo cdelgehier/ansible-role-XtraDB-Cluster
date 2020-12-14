@@ -88,7 +88,7 @@ innodb_autoinc_lock_mode={{ xtradb_innodb_autoinc_lock_mode }}{% endif %}
 binlog_format={{ xtradb_binlog_format }}{% endif %}
 
 {% for db in xtradb_databases %}
-{% if db.replicate|default(1) %}
+{% if db.replicate | d(1) %}
 binlog_do_db = {{ db.name }}
 {% else %}
 binlog_ignore_db = {{ db.name }}
@@ -101,10 +101,10 @@ binlog_ignore_db = {{ db.name }}
 wsrep_provider={{ xtradb_wsrep_provider }}
 
 # Node address
-wsrep_node_address={{ xtradb_node_address | default(xtradb_bind_address) }}
+wsrep_node_address={{ xtradb_node_address | d(xtradb_bind_address) }}
 
 # Node name
-wsrep_node_name={{ ansible_hostname }}
+wsrep_node_name={{ xtradb_node_name | d(ansible_hostname) }}
 
 # Cluster name
 wsrep_cluster_name={{ xtradb_cluster_name }}

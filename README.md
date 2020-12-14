@@ -19,6 +19,7 @@ No specific requirements
 | `xtradb_bind_address` | - | The listening IP |
 | `xtradb_bind_interface` | `eth0` | The interface used by the cluster |
 | `xtradb_cluster_name` | `foo` | A name for the cluster |
+| `xtradb_node_name` | `<os-hostname>` | A name for the node |
 | `xtradb_configured` | `xtradb_datadir`/configured | A cookie for idempotency |
 | `xtradb_datadir` | `/var/lib/mysql` | Directory of data |
 | `xtradb_master_node` | `groups[xtradb_nodes_group][0]` | The chosen node to be master |
