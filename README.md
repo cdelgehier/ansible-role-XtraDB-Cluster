@@ -24,6 +24,7 @@ No specific requirements
 | `xtradb_master_node` | `groups[xtradb_nodes_group][0]` | The chosen node to be master |
 | `xtradb_mysql_user` | `mysql` | The user for run galera |
 | `xtradb_nodes_group` | `xtradb-cluster-nodes` | Node group where the cluster will be installed |
+| `xtradb_nodes` | [] | A list of the nodes taking part of the cluster |
 | `xtradb_root_password` | `root` | Password for the root user |
 | `xtradb_root_user` | `root` | The root user |
 | `xtradb_secured` | `xtradb_datadir`/secured |A cookie for idempotency |
