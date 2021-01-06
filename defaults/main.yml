@@ -128,7 +128,9 @@ xtradb_skip_name_resolve: "1"
 xtradb_default_storage_engine: "InnoDB"
 xtradb_event_scheduler: ""
 
-xtradb_monitoring: true
 
-## Monitoring 
+## Monitoring
+xtradb_monitoring: true
 mysql_exporter_conf_dir: /etc/mysqld_exporter/
+monitoring_user: monitoring
+monitoring_pass: Xymonitoring # Override this on group-inventory
