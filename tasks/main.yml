@@ -37,6 +37,17 @@
   register: "_xtradb_activation"
   tags: activation
 
+- name: "Activate Percona 8.0 repository via percona-release tools"
+  command: percona-release enable pxc-80
+  register: "_xtradb_activation"
+  when: xtradb_version|int >= 8.0
+  tags: activation
+
+- name: PXC | Update cache
+  apt:
+    update_cache: yes
+  changed_when: false
+
 - name: Install packages
   package:
     name: "{{ item }}"
