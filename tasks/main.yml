@@ -40,7 +40,7 @@
 - name: "Activate Percona 8.0 repository via percona-release tools"
   command: percona-release enable pxc-80
   register: "_xtradb_activation"
-  when: xtradb_version|int >= 8.0
+  when: xtradb_version|truncate(1, True, '') >= "8"
   tags: activation
 
 - name: PXC | Update cache
