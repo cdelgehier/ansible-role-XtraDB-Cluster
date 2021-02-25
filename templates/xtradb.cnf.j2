@@ -115,7 +115,7 @@ wsrep_cluster_address={{ xtradb_wsrep_cluster_address }}
 # SST method
 wsrep_sst_method={{ xtradb_sst_method }}
 
-{% if xtradb_sst_method == "xtrabackup-v2" %}
+{% if xtradb_sst_method == "xtrabackup-v2" and xtradb_version[0] < "8" %}
 # Authentication for SST method
 wsrep_sst_auth={{ xtradb_sst_user }}:{{ xtradb_sst_password }}
 
