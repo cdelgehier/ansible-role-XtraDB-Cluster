@@ -55,6 +55,14 @@
   with_items: "{{ xtradb_packages }}"
   tags: install
 
+- name: Set the authentication plugin (PXC 8.0)
+  lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    line: 'default-authentication-plugin={{ xtradb_auth_plugin_80 }}'
+  when: >
+    xtradb_version|truncate(1, True, '') >= "8" and
+    xtradb_auth_plugin_80 != 'caching_sha2_password'
+
 - name: Ensure service is started
   service:
     name: "{{ xtradb_service }}"

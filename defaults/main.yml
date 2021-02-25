@@ -19,6 +19,9 @@ xtradb_secured: "{{ xtradb_confdir }}/_secured"
 # password changed cookie
 xtradb_password_changed: "{{ xtradb_confdir }}/_password_changed"
 
+# the default auth plugin (PXC 8.0 changed it to: caching_sha2_password)
+xtradb_auth_plugin_80: mysql_native_password
+
 #ansible_host Defnes the root user
 xtradb_root_user: root
 
