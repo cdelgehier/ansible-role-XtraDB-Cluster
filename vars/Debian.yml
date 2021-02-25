@@ -11,4 +11,5 @@ xtradb_config_file: "{{ xtradb_confdir }}/wsrep.cnf"
 xtradb_packages:
   - "percona-xtradb-cluster{% if xtradb_version[0] < '8' %}-{{ xtradb_version }}{% endif %}"
   - "python{% if ansible_python_version is version('3.0.0', '>') %}3{% endif %}-mysqldb"
+  - "{% if xtradb_version[0] >= '8' %}libperconaserverclient21{% else %}less{% endif %}"
 ...

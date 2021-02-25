@@ -17,6 +17,7 @@
     path: /etc/mysql/my.cnf
     regexp: '^!includedir /etc/mysql/mariadb.conf.d/$'
     replace: '!includedir /etc/mysql/percona-xtradb-cluster.conf.d/'
+  when: xtradb_version|truncate(1, True, '') < "8"
 
 - name: Configure swappiness
   sysctl:

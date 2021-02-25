@@ -12,7 +12,7 @@
     not _xtradb_password_changed.stat.exists and
     xtradb_version|truncate(1, True, '') < "8"
 
-- name: Set the MySQL root password (MySQL 8.0+)
+- name: Set the MySQL root password (PXC 8.0+)
   mysql_user:
     login_host: 'localhost'
     login_user: '{{ xtradb_root_user }}'

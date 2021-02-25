@@ -5,6 +5,12 @@
     update_cache: yes
   changed_when: false
 
+- name: PXC | Remove mariadb-common (if any)
+  apt:
+    pkg: mariadb-common
+    state: absent
+  when: xtradb_version|truncate(1, True, '') >= "8"
+
 - name: PXC | Install Percona repo
   apt:
     deb: "{{ xtradb_repo_deb_url }}"
