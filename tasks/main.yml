@@ -90,4 +90,4 @@
   import_tasks: postinstall.yml
   tags: configure
   when:
-    - xtradb_bind_address == xtradb_master_node
+    - xtradb_master_node in ansible_all_ipv4_addresses
