@@ -42,15 +42,16 @@
     - xtradb_bind_address == xtradb_master_node
     - ansible_os_family == "Debian"
 
-- name: Create SST user
+- name: Create SST user (PXC 5.7 or older)
   mysql_user:
     login_user: "{{ xtradb_root_user }}"
     login_password: "{{ xtradb_root_password }}"
     user: "{{ xtradb_sst_user }}"
     password: "{{ xtradb_sst_password }}"
     priv: "*.*:grant,reload,lock tables,process,replication client"
-  when:
-    - xtradb_bind_address == xtradb_master_node
+  when: >
+    xtradb_version|truncate(1, True, '') < "8" and
+    xtradb_bind_address == xtradb_master_node
 
 - name: Start the slave nodes
   service:
