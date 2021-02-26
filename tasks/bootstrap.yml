@@ -33,13 +33,13 @@
     name: "{{ xtradb_service }}@bootstrap.service"
     state: started
   when:
-    - xtradb_bind_address == xtradb_master_node
+    - xtradb_master_node in ansible_all_ipv4_addresses
     - ansible_os_family == "RedHat"
 
 - name: Start the master node
   command: /etc/init.d/mysql bootstrap-pxc
   when:
-    - xtradb_bind_address == xtradb_master_node
+    - xtradb_master_node in ansible_all_ipv4_addresses
     - ansible_os_family == "Debian"
 
 - name: Create SST user (PXC 5.7 or older)
