@@ -63,6 +63,16 @@
     xtradb_version|truncate(1, True, '') >= "8" and
     xtradb_auth_plugin_80 != 'caching_sha2_password'
 
+- name: Force the client character set (PXC 8.0)
+  lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    firstmatch: yes
+    insertafter: '^\[client\]$'
+    line: 'default_character_set={{ xtradb_character_set_client }}'
+  when: >
+    xtradb_version|truncate(1, True, '') >= "8" and
+    xtradb_character_set_client|d('')
+
 - name: Ensure service is started
   service:
     name: "{{ xtradb_service }}"

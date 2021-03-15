@@ -84,6 +84,7 @@ xtradb_databases: []
 xtradb_binlog_format: "ROW"
 xtradb_character_set_server: "utf8"
 xtradb_collation_server: "utf8_general_ci"
+xtradb_character_set_client: ""
 xtradb_default_storage_engine: "InnoDB"
 xtradb_innodb_autoinc_lock_mode: 2
 xtradb_innodb_buffer_pool_instances: ""
