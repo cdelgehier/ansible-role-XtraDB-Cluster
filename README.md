@@ -32,6 +32,7 @@ No specific requirements
 | `xtradb_service` | `mysql` | Linux service name  |
 | `xtradb_sst_password` | `sstpassword` | Password for the `xtradb_sst_user` |
 | `xtradb_sst_user` | `sstuser` | User used to the state snapshot transfer  |
+| `xtradb_sync_wait` | `0` | Level of query causality checks (0 - 7, trade-off consistency for speed)  |
 | `xtradb_swappiness` | `0` | "Swappiness" value. System default is 60. A value of 0 means that swapping out processes is avoided.  |
 | `xtradb_databases`     | []          | List of names of the databases to be added                                                                  |
 | `xtradb_users`         | []          | List of dicts specifying the users to be added. See below for details.                                      |

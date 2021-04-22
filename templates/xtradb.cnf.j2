@@ -120,6 +120,11 @@ wsrep_sst_method={{ xtradb_sst_method }}
 wsrep_sst_auth={{ xtradb_sst_user }}:{{ xtradb_sst_password }}
 
 {% endif %}
+{% if xtradb_sync_wait %}
+# Causality checks for various queries
+wsrep_sync_wait={{ xtradb_sync_wait }}
+
+{% endif %}
 {% if xtradb_pxc_strict_mode %}# pxc_strict_mode allowed values: DISABLED,PERMISSIVE,ENFORCING,MASTER
 # Set ENFORCING to block the use of experimental and unsupported features in Percona XtraDB Cluster
 pxc_strict_mode={{ xtradb_pxc_strict_mode }}{% endif %}

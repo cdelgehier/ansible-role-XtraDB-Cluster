@@ -68,6 +68,9 @@ xtradb_sst_user: sstuser
 # Defines the sst password
 xtradb_sst_password: sstpassword
 
+# Query causality checks
+xtradb_sync_wait: ''
+
 # Defines the cluster name
 xtradb_cluster_name: foo
 
