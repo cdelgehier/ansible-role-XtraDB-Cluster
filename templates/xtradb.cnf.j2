@@ -88,10 +88,8 @@ innodb_autoinc_lock_mode={{ xtradb_innodb_autoinc_lock_mode }}{% endif %}
 binlog_format={{ xtradb_binlog_format }}{% endif %}
 
 {% for db in xtradb_databases %}
-{% if db.replicate | d(1) %}
-binlog_do_db = {{ db.name }}
-{% else %}
-binlog_ignore_db = {{ db.name }}
+{% if db.replicate is defined %}
+binlog_{{ db.replicate | ternary("do", "ignore") }}_db = {{ db.name }}
 {% endif %}
 {% endfor %}
 
