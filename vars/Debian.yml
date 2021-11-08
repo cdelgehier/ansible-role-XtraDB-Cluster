@@ -5,7 +5,7 @@
 
 xtradb_repo_filename: "percona"
 xtradb_repo_baseurl: "deb http://repo.percona.com/apt {{ ansible_distribution_release }} main"
-xtradb_repo_gpgkey: 8507EFA5
+xtradb_repo_gpgkey: 9334A25F8507EFA5
 
 xtradb_wsrep_provider: /usr/lib/libgalera_smm.so
 xtradb_confdir: /etc/mysql/percona-xtradb-cluster.conf.d
