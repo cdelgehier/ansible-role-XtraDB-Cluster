@@ -11,6 +11,10 @@
     state: absent
   when: xtradb_version|truncate(1, True, '') >= "8"
 
+- name: PXC | Ensure GPG2 package
+  apt:
+    pkg: gnupg2
+
 - name: PXC | Install Percona repo
   apt:
     deb: "{{ xtradb_repo_deb_url }}"
