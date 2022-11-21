@@ -97,6 +97,9 @@ binlog_{{ db.replicate | ternary("do", "ignore") }}_db = {{ db.name }}
 
 # Path to Galera library
 wsrep_provider={{ xtradb_wsrep_provider }}
+{%- if xtradb_wsrep_provider_options %}
+wsrep_provider_options={{ xtradb_wsrep_provider_options }}
+{%- endif %}
 
 # Node address
 wsrep_node_address={{ xtradb_node_address | d(xtradb_bind_address) }}
