@@ -13,13 +13,13 @@
   register: "_xtradb_configured"
   tags: install
 
-- name: Cheking if XtraDB cluster is already secured
+- name: Checking if XtraDB cluster is already secured
   stat:
     path: "{{ xtradb_secured }}"
   register: "_xtradb_secured"
   tags: install
 
-- name: Cheking if XtraDB cluster is already configured with the password
+- name: Checking if XtraDB cluster is already configured with the password
   stat:
     path: "{{ xtradb_password_changed }}"
   register: "_xtradb_password_changed"
@@ -32,12 +32,46 @@
     - "{{ ansible_os_family }}.yml"
   tags: install
 
+- name: "Activate repository via percona-release tools"
+  command: percona-release enable-only original
+  register: "_xtradb_activation"
+  tags: activation
+
+- name: "Activate PXC 8.0 repository via percona-release tools"
+  command: percona-release enable pxc-80
+  register: "_xtradb_activation"
+  when: xtradb_version|truncate(1, True, '') >= "8"
+  tags: activation
+
+- name: PXC | Update cache
+  apt:
+    update_cache: yes
+  changed_when: false
+
 - name: Install packages
   package:
     name: "{{ item }}"
-    state: installed
+    state: present
   with_items: "{{ xtradb_packages }}"
   tags: install
+
+- name: Set the authentication plugin (PXC 8.0)
+  lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    line: 'default-authentication-plugin={{ xtradb_auth_plugin_80 }}'
+  when: >
+    xtradb_version|truncate(1, True, '') >= "8" and
+    xtradb_auth_plugin_80 != 'caching_sha2_password'
+
+- name: Force the client character set (PXC 8.0)
+  lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    firstmatch: yes
+    insertafter: '^\[client\]$'
+    line: 'default_character_set={{ xtradb_character_set_client }}'
+  when: >
+    xtradb_version|truncate(1, True, '') >= "8" and
+    xtradb_character_set_client|d('')
 
 - name: Ensure service is started
   service:
@@ -66,4 +100,4 @@
   import_tasks: postinstall.yml
   tags: configure
   when:
-    - xtradb_bind_address == xtradb_master_node
+    - xtradb_master_node in ansible_all_ipv4_addresses

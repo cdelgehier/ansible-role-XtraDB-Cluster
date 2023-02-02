@@ -2,13 +2,20 @@
 [mysqld]
 
 # GENERAL #####
+{% if xtradb_bind_address %}bind-address={{ xtradb_bind_address }}{% endif %}
+
 {% if xtradb_socket %}socket={{ xtradb_socket }}{% endif %}
 
 user={{ xtradb_mysql_user }}
 datadir={{ xtradb_datadir }}
+{% if xtradb_sql_mode %}
+sql_mode = {{ xtradb_sql_mode }}
+{% endif %}
 
 
 {% if xtradb_log_warnings %}log_warnings={{ xtradb_log_warnings }}{% endif %}
+
+{% if xtradb_log_error_verbosity %}log_error_verbosity={{ xtradb_log_error_verbosity }}{% endif %}
 
 {% if xtradb_slow_query_log %}slow_query_log={{ xtradb_slow_query_log }}{% endif %}
 
@@ -80,17 +87,25 @@ innodb_autoinc_lock_mode={{ xtradb_innodb_autoinc_lock_mode }}{% endif %}
 {% if xtradb_binlog_format %}# In order for Galera to work correctly binlog format should be ROW
 binlog_format={{ xtradb_binlog_format }}{% endif %}
 
+{% for db in xtradb_databases %}
+{% if db.replicate is defined %}
+binlog_{{ db.replicate | ternary("do", "ignore") }}_db = {{ db.name }}
+{% endif %}
+{% endfor %}
 
 # WSREP options #####
 
 # Path to Galera library
 wsrep_provider={{ xtradb_wsrep_provider }}
+{%- if xtradb_wsrep_provider_options %}
+wsrep_provider_options={{ xtradb_wsrep_provider_options }}
+{%- endif %}
 
 # Node address
-wsrep_node_address={{ xtradb_bind_address }}
+wsrep_node_address={{ xtradb_node_address | d(xtradb_bind_address) }}
 
 # Node name
-wsrep_node_name={{ ansible_hostname }}
+wsrep_node_name={{ xtradb_node_name | d(ansible_hostname) }}
 
 # Cluster name
 wsrep_cluster_name={{ xtradb_cluster_name }}
@@ -99,12 +114,18 @@ wsrep_cluster_name={{ xtradb_cluster_name }}
 wsrep_cluster_address={{ xtradb_wsrep_cluster_address }}
 
 # SST method
-wsrep_sst_method=xtrabackup-v2
+wsrep_sst_method={{ xtradb_sst_method }}
 
+{% if xtradb_sst_method == "xtrabackup-v2" and xtradb_version[0] < "8" %}
 # Authentication for SST method
 wsrep_sst_auth={{ xtradb_sst_user }}:{{ xtradb_sst_password }}
 
+{% endif %}
+{% if xtradb_sync_wait %}
+# Causality checks for various queries
+wsrep_sync_wait={{ xtradb_sync_wait }}
 
+{% endif %}
 {% if xtradb_pxc_strict_mode %}# pxc_strict_mode allowed values: DISABLED,PERMISSIVE,ENFORCING,MASTER
 # Set ENFORCING to block the use of experimental and unsupported features in Percona XtraDB Cluster
 pxc_strict_mode={{ xtradb_pxc_strict_mode }}{% endif %}

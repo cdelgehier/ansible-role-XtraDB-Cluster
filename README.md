@@ -19,21 +19,26 @@ No specific requirements
 | `xtradb_bind_address` | - | The listening IP |
 | `xtradb_bind_interface` | `eth0` | The interface used by the cluster |
 | `xtradb_cluster_name` | `foo` | A name for the cluster |
+| `xtradb_node_name` | `<os-hostname>` | A name for the node |
 | `xtradb_configured` | `xtradb_datadir`/configured | A cookie for idempotency |
 | `xtradb_datadir` | `/var/lib/mysql` | Directory of data |
 | `xtradb_master_node` | `groups[xtradb_nodes_group][0]` | The chosen node to be master |
 | `xtradb_mysql_user` | `mysql` | The user for run galera |
 | `xtradb_nodes_group` | `xtradb-cluster-nodes` | Node group where the cluster will be installed |
+| `xtradb_nodes` | [] | A list of the nodes taking part of the cluster |
 | `xtradb_root_password` | `root` | Password for the root user |
 | `xtradb_root_user` | `root` | The root user |
 | `xtradb_secured` | `xtradb_datadir`/secured |A cookie for idempotency |
 | `xtradb_service` | `mysql` | Linux service name  |
 | `xtradb_sst_password` | `sstpassword` | Password for the `xtradb_sst_user` |
 | `xtradb_sst_user` | `sstuser` | User used to the state snapshot transfer  |
+| `xtradb_sync_wait` | `0` | Level of query causality checks (0 - 7, trade-off consistency for speed)  |
 | `xtradb_swappiness` | `0` | "Swappiness" value. System default is 60. A value of 0 means that swapping out processes is avoided.  |
 | `xtradb_databases`     | []          | List of names of the databases to be added                                                                  |
 | `xtradb_users`         | []          | List of dicts specifying the users to be added. See below for details.                                      |
 | `xtradb_version` | `57` | Package version of XtraDB |
+| `xtradb_repo_deb_release` | `latest` | Debian Release of XtraDB (check [releases](https://repo.percona.com/apt/)) |
+| `xtradb_repo_deb_distro` | distribution release (ex: `stretch`, `buster`, etc.) | Debian Distribution Releases of XtraDB (check [releases](https://repo.percona.com/apt/)) |
 
 ### MySQL part
 For more info on the values, read the [MariaDB Server System Variables documentation](https://mariadb.com/kb/en/mariadb/server-system-variables/).
@@ -57,8 +62,8 @@ For more info on the values, read the [MariaDB Server System Variables documenta
 | `xtradb_innodb_file_per_table` | `on` | innodb_file_per_table is ON by default from MySQL 5.6. This is usually recommended as it avoids having a huge shared tablespace and as it allows you to reclaim space when you drop or truncate a table. Separate tablespace also benefits for Xtrabackup partial backup scheme |
 | `xtradb_innodb_strict_mode` | `on` |  |
 | `xtradb_join_buffer_size` | ` ` |  |
-| `xtradb_log_warnings` | ` ` |  |
-| `xtradb_log_warnings` | ` ` |  |
+| `xtradb_log_warnings` | `2` | DEPRECATED: whether to produce additional warning/info logs (0-2) |
+| `xtradb_log_error_verbosity` | `3` | whether to produce additional warning/info logs (1-3) |
 | `xtradb_long_query_time` | ` ` |  |
 | `xtradb_max_allowed_packet` | ` ` |  |
 | `xtradb_max_connections` | `4096` |  |
@@ -176,7 +181,7 @@ No dependencies.
       xtradb_innodb_log_file_size: "50M"
       xtradb_innodb_strict_mode: "on"
       xtradb_join_buffer_size: "128K"
-      xtradb_log_warnings: "1"
+      xtradb_log_error_verbosity: 2
       xtradb_long_query_time: "10"
       xtradb_max_allowed_packet: "16M"
       xtradb_max_connections: "505"

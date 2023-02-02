@@ -2,18 +2,28 @@
 - name: Get temporary root password
   shell: grep 'temporary password' /var/log/mysqld.log | awk '{print $NF}' | tail -n 1
   register: "_xtradb_root_temp_password"
-  when:
-    - not _xtradb_password_changed.stat.exists
-#  args:
-#    creates: "{{ xtradb_password_changed }}"
-
+  when: >
+    not _xtradb_password_changed.stat.exists and
+    xtradb_version|truncate(1, True, '') < "8"
 
 - name: Set the MySQL root password
-  shell: 'mysqladmin -u root --password="{{ _xtradb_root_temp_password.stdout }}" password "{{ xtradb_root_password }}"'
-  when:
-    - not _xtradb_password_changed.stat.exists
-#  args:
-#    creates: "{{ xtradb_password_changed }}"
+  shell: "echo \"ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ xtradb_root_password }}'; FLUSH PRIVILEGES;\" | mysql -u root --password='{{ _xtradb_root_temp_password.stdout }}' --connect-expired-password"
+  when: >
+    not _xtradb_password_changed.stat.exists and
+    xtradb_version|truncate(1, True, '') < "8"
+
+- name: Set the MySQL root password (PXC 8.0+)
+  mysql_user:
+    login_host: 'localhost'
+    login_user: '{{ xtradb_root_user }}'
+    login_password: ''
+    name: "{{ xtradb_root_user }}"
+    host_all: true
+    password: '{{ xtradb_root_password | mandatory }}'
+    state: present
+  when: >
+    not _xtradb_password_changed.stat.exists and
+    xtradb_version|truncate(1, True, '') >= "8"
 
 - name: Marking as password is changed
   file:
@@ -26,7 +36,7 @@
 - name: Delete anonymous connections
   mysql_user:
     login_user: "{{ xtradb_root_user }}"
-    login_password: "{{ xtradb_root_password }}"
+    login_password: "{{ xtradb_root_password | mandatory }}"
     name: ""
     host_all: yes
     state: absent
@@ -34,7 +44,7 @@
 - name: "Secure the MySQL root user for localhost"
   mysql_user:
     login_user: "{{ xtradb_root_user }}"
-    login_password: "{{ xtradb_root_password }}"
+    login_password: "{{ xtradb_root_password | mandatory }}"
     name: "{{ xtradb_root_user }}"
     host: "{{ item }}"
   with_items:
@@ -48,7 +58,7 @@
   mysql_db:
     db: test
     login_user: "{{ xtradb_root_user }}"
-    login_password: "{{ xtradb_root_password }}"
+    login_password: "{{ xtradb_root_password | mandatory }}"
     state: absent
 
 

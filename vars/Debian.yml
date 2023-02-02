@@ -3,15 +3,13 @@
 # Distribution-specific variables for Debian, Ubuntu, ...
 ---
 
-xtradb_repo_filename: "percona"
-xtradb_repo_baseurl: "deb http://repo.percona.com/apt {{ ansible_distribution_release }} main"
-xtradb_repo_gpgkey: 8507EFA5
+xtradb_repo_deb_url: "https://repo.percona.com/apt/percona-release_{{ xtradb_repo_deb_release }}.{{ xtradb_repo_deb_distro }}_all.deb"
 
-xtradb_wsrep_provider: /usr/lib/libgalera_smm.so
-xtradb_confdir: /etc/mysql/percona-xtradb-cluster.conf.d
+xtradb_wsrep_provider: '/usr/lib{% if xtradb_version[0] >= "8" %}/galera4{% endif %}/libgalera_smm.so'
+xtradb_confdir: '/etc/mysql/{% if xtradb_version[0] < "8" %}percona-xtradb-cluster.conf.d{% else %}mysql.conf.d{% endif %}'
 xtradb_config_file: "{{ xtradb_confdir }}/wsrep.cnf"
 xtradb_packages:
-  #- "percona-server-server-{{ xtradb_version }}"
-  - "percona-xtradb-cluster-{{ xtradb_version }}"
-  - python3-mysqldb
+  - "percona-xtradb-cluster{% if xtradb_version[0] < '8' %}-{{ xtradb_version }}{% endif %}"
+  - "python{% if ansible_python_version is version('3.0.0', '>') %}3{% endif %}-mysqldb"
+  - "{% if xtradb_version[0] >= '8' %}libperconaserverclient21{% else %}less{% endif %}"
 ...

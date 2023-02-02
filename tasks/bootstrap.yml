@@ -12,44 +12,82 @@
     group: root
     mode: 0644
 
+- name: Overwrite MariaDB includedir
+  replace:
+    path: /etc/mysql/my.cnf
+    regexp: '^!includedir /etc/mysql/mariadb.conf.d/$'
+    replace: '!includedir /etc/mysql/percona-xtradb-cluster.conf.d/'
+  when: xtradb_version|truncate(1, True, '') < "8"
+
 - name: Configure swappiness
   sysctl:
     name: vm.swappiness
     value: "{{ xtradb_swappiness }}"
     state: present
-  when:
-    - docker is not defined
+  when: >
+    docker is not defined and
+    xtradb_swappiness >= 0
 
-- name: Start the master node
+- name: Start the master node (RedHat)
   service:
     name: "{{ xtradb_service }}@bootstrap.service"
     state: started
   when:
-    - xtradb_bind_address == xtradb_master_node
+    - xtradb_master_node in ansible_all_ipv4_addresses
     - ansible_os_family == "RedHat"
 
-- name: Start the master node
+- name: Start the master node (Debian)
   command: /etc/init.d/mysql bootstrap-pxc
   when:
-    - xtradb_bind_address == xtradb_master_node
+    - xtradb_version|truncate(1, True, '') < "8"
+    - xtradb_master_node in ansible_all_ipv4_addresses
     - ansible_os_family == "Debian"
 
-- name: Create SST user
+- name: Start the master node (Debian, PXC 8.0+)
+  service:
+    name: "{{ xtradb_service }}@bootstrap.service"
+    state: started
+  when:
+    - xtradb_version|truncate(1, True, '') >= "8"
+    - xtradb_master_node in ansible_all_ipv4_addresses
+    - ansible_os_family == "Debian"
+
+- name: Create SST user (PXC 5.7 or older)
   mysql_user:
     login_user: "{{ xtradb_root_user }}"
     login_password: "{{ xtradb_root_password }}"
     user: "{{ xtradb_sst_user }}"
     password: "{{ xtradb_sst_password }}"
     priv: "*.*:grant,reload,lock tables,process,replication client"
-  when:
-    - xtradb_bind_address == xtradb_master_node
+  when: >
+    xtradb_version|truncate(1, True, '') < "8" and
+    xtradb_master_node in ansible_all_ipv4_addresses
+
+- name: Fetch the TLS certs from the master node (PXC 8.0)
+  fetch:
+    src: '/var/lib/mysql/{{ item }}.pem'
+    dest: /tmp/.ansible-tmp/
+    flat: yes
+    run_once: yes
+  with_items: ['ca', 'ca-key', 'client-cert', 'client-key', 'server-cert', 'server-key']
+  when: >
+    xtradb_version|truncate(1, True, '') >= "8" and
+    xtradb_master_node in ansible_all_ipv4_addresses
+
+- name: Install the master TLS certs on other nodes (PXC 8.0)
+  copy:
+    src: '/tmp/.ansible-tmp/{{ item }}.pem'
+    dest: '/var/lib/mysql/{{ item }}.pem'
+  with_items: ['ca', 'ca-key', 'client-cert', 'client-key', 'server-cert', 'server-key']
+  when: >
+    xtradb_version|truncate(1, True, '') >= "8" and
+    xtradb_master_node not in ansible_all_ipv4_addresses
 
 - name: Start the slave nodes
   service:
     name: "{{ xtradb_service }}"
     state: started
-  when:
-    - xtradb_bind_address != xtradb_master_node
+  when: xtradb_master_node not in ansible_all_ipv4_addresses
 
 - name: Marking as configured
   file:

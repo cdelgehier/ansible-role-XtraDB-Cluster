@@ -4,6 +4,9 @@
 # Data directory
 xtradb_datadir: /var/lib/mysql
 
+# Custom SQL mode
+xtradb_sql_mode: ''
+
 # Defines the user used
 xtradb_mysql_user: mysql
 
@@ -16,6 +19,9 @@ xtradb_secured: "{{ xtradb_confdir }}/_secured"
 # password changed cookie
 xtradb_password_changed: "{{ xtradb_confdir }}/_password_changed"
 
+# the default auth plugin (PXC 8.0 changed it to: caching_sha2_password)
+xtradb_auth_plugin_80: mysql_native_password
+
 #ansible_host Defnes the root user
 xtradb_root_user: root
 
@@ -26,14 +32,23 @@ xtradb_root_password: root
 xtradb_nodes_group: xtradb-cluster-nodes
 
 # Define the node pool 
-xtradb_wsrep_cluster_address: "gcomm://{{ groups[xtradb_nodes_group] | map('extract', hostvars, ['ansible_' ~ xtradb_bind_interface, 'ipv4', 'address']) | join(',') }}"
+xtradb_wsrep_cluster_address: "gcomm://{% if xtradb_nodes is defined %}{{ xtradb_nodes | join(',') }}{% else %}{{ groups[xtradb_nodes_group] | map('extract', hostvars, ['ansible_' ~ xtradb_bind_interface, 'ipv4', 'address']) | join(',') }}{% endif %}"
 
 # Defines the which node should be considered the master in the cluster
 # Used to bootstrap cluster
-xtradb_master_node: "{{ hostvars[ groups[xtradb_nodes_group][0] ].ansible_default_ipv4.address }}"
+xtradb_master_node: "{% if xtradb_nodes is defined %}{{ xtradb_nodes[0] | regex_replace(':.*$', '') }}{% else %}{{ hostvars[ groups[xtradb_nodes_group][0] ]['ansible_' ~ xtradb_bind_interface].ipv4.address }}{% endif %}"
 
 # Defines the version
 xtradb_version: "57"
+
+# Defines the Debian release of the Percona repository
+# Please check your desired release [here](https://repo.percona.com/apt/)
+xtradb_repo_deb_release: "latest"
+
+# Defines the Debian distro release of the Percona repository
+# Please check your desired distro release [here](https://repo.percona.com/apt/)
+# a common value is `generic`
+xtradb_repo_deb_distro: "{{ ansible_distribution_release }}"
 
 # Defines the service systemd
 xtradb_service: mysql
@@ -44,16 +59,22 @@ xtradb_bind_interface: eth0
 # Defines the network address used
 xtradb_bind_address: "{{ hostvars[inventory_hostname]['ansible_' + xtradb_bind_interface]['ipv4']['address'] }}"
 
+# Defines the SST method
+xtradb_sst_method: rsync
+
 # Defines the sst user
 xtradb_sst_user: sstuser
 
 # Defines the sst password
 xtradb_sst_password: sstpassword
 
+# Query causality checks
+xtradb_sync_wait: ''
+
 # Defines the cluster name
 xtradb_cluster_name: foo
 
-# Defines the swappiness by node
+# Defines the swappiness by node (< 0 will skip this setting, otherwise 0-100)
 xtradb_swappiness: 0
 
 # Defines users to create
@@ -66,6 +87,7 @@ xtradb_databases: []
 xtradb_binlog_format: "ROW"
 xtradb_character_set_server: "utf8"
 xtradb_collation_server: "utf8_general_ci"
+xtradb_character_set_client: ""
 xtradb_default_storage_engine: "InnoDB"
 xtradb_innodb_autoinc_lock_mode: 2
 xtradb_innodb_buffer_pool_instances: ""
@@ -79,6 +101,7 @@ xtradb_innodb_log_file_size: ""
 xtradb_innodb_strict_mode: "on"
 xtradb_join_buffer_size: ""
 xtradb_log_warnings: ""
+xtradb_log_error_verbosity: ""
 xtradb_long_query_time: ""
 xtradb_max_allowed_packet: ""
 xtradb_max_connections: "4096"
@@ -96,5 +119,6 @@ xtradb_table_definition_cache: ""
 xtradb_table_open_cache: ""
 xtradb_table_open_cache_instances: ""
 xtradb_tmp_table_size: ""
+xtradb_wsrep_provider_options: ""
 
 ...
